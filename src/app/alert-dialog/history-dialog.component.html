@@ -1,0 +1,20 @@
+<div class="msg-dialog wec-dialog">
+    <h2 mat-dialog-title>Action History</h2>
+    <mat-dialog-content class="mat-typography">
+       <div class="row pl-2">
+         <label for=""></label>
+         <div class="col-12">
+             <ul *ngIf="data.length > 0">
+                <li *ngFor="let history of data">
+                  <span>{{history.status | titlecase }} by {{history.actionBy}} on {{ history.createdAt | date:'mediumDate'}}</span> <br>
+                  <span>Reason:- </span>{{ history.reason}}
+                </li>
+            </ul>
+            <span *ngIf="data.length == 0">No history available for this request</span>
+         </div>
+     </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="padding-bottom-30">
+       <button class="mat-raised-button primary-text" (click)="close()">Okay</button>
+    </mat-dialog-actions>
+ </div>

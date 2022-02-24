@@ -1,0 +1,13 @@
+<div class="msg-dialog wec-dialog">
+    <h2 mat-dialog-title>File upload</h2>
+    <mat-dialog-content class="mat-typography">
+        <file-pond #myPond [options]="pondOptions" [files]="pondFiles" (oninit)="pondHandleInit()" 
+        (onaddfile)="pondHandleAddFile($event)" className="my-class" allowMultiple="true" 
+        acceptedFileTypes="image/jpeg, image/png, image/pdf">
+    </file-pond>
+    </mat-dialog-content>
+    <mat-dialog-actions class="padding-bottom-30">
+        <button  class="mat-raised-button mat-primary" (click)="uploadFiles()">Submit</button>
+       <button class="mat-raised-button primary-text" (click)="close()">Cancel</button>
+    </mat-dialog-actions>
+ </div>

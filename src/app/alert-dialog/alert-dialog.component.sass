@@ -1,0 +1,121 @@
+::ng-deep
+    .star-ratings
+        height: auto !important
+        max-height: 100% !important
+        min-height: 100% !important
+    .grade-row
+        display: flex
+        justify-content: center
+        font-size: 12px
+        margin: auto
+        -webkit-box-direction: normal
+        flex-flow: row wrap
+        width: 100%
+        .grade
+            display: flex
+            flex-direction: column
+            text-align: center
+            justify-content: center
+            align-items: center
+            margin: 2px
+            mat-icon
+                color: #FF9A00
+                font-size: 3rem
+                display: block
+                height: auto
+                width: auto
+                position: relative
+                span               
+                    font-size: 14px
+                    color: #0D436B
+                    position: absolute
+                    left: 0
+                    right: 0
+                    top: 19px
+                    font-weight: 600
+                
+    .cdk-global-overlay-wrapper
+        overflow: auto !important
+        pointer-events: auto
+
+.msg-dialog
+    overflow: hidden !important
+.padding-bottom-30
+    padding-bottom: 30px !important
+.cancel_button   
+    background-color: #031f40
+    color: white
+
+.mat-grid-tile 
+  background: #022F5F
+.wc-info-dialog
+    h5
+        display: flex
+        font-size: 14px
+        color: #000
+        text-align: center
+        justify-content: center
+        margin: 0
+        align-items: center
+        font-weight: normal
+        .mat-icon
+            margin-left: .5rem
+            font-size: 20px
+    p
+        color: #666666
+        font-size: 16px
+        font-weight: bold
+
+.wc-competitor-list
+    border: 1px solid #E5E5E5
+    border-radius: 1rem
+    word-break: break-all
+    margin: 5px
+    padding: 1rem
+    min-height: 113.58px
+    max-height: 143.58px
+    height: 100%
+
+    p
+        color: #003566
+        margin-bottom:0rem
+        display: block
+        font-size: 13px
+        text-transform: capitalize
+    h6
+        position: absolute
+        left: 1rem
+        top: 1rem
+    .wc-tiles-link
+        text-decoration: underline
+        color: #0089FF
+        font-size: 12px
+        line-height: 1
+        display: block
+        margin-top: .5rem
+    img
+        max-width: 100%
+        margin-bottom: 0.5rem
+        max-height: 100px
+        width: 170px
+        height: 92px
+.paraText
+    max-width: 40em
+    margin-left: auto
+    margin-right: auto
+
+    @media (min-width:768px)
+        .grade-row
+            max-width: 320px
+            .grade
+                flex-grow: 4
+    @media (max-width:767px)
+        .wc-competitor-list
+            min-height: 160px
+        .grade-row
+            max-width: 100%
+            .grade
+                flex-grow: 4
+
+            
+        

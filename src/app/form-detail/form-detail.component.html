@@ -1,0 +1,561 @@
+<mat-toolbar class="custom-mat-toolbar custom-mat-toolbar-heading form-details-toolbar">
+    <span class="custom-title">Application No - NS-{{ fileNo }}</span>
+    <div class="form-detail-actions ">
+        <button class="view-btn white-bg action-btn margin-right-5 primary-text" aria-label="view history" mat-stroked-button color="primary" (click)="fetchHistory()">
+            <mat-icon>history</mat-icon>
+            <span class="label">View History</span>
+        </button>
+        <button class="email-btn white-bg action-btn primary-text" aria-label="email content" mat-stroked-button color="primary" (click)="openEmailContent()">
+            <mat-icon>email</mat-icon>
+            <span class="label">Email Content</span>
+        </button>
+        <button class="download-btn white-bg action-btn margin-right-5 primary-text" aria-label="download product report" mat-stroked-button color="primary" (click)="downloadProductReport()">
+            <mat-icon>file_download</mat-icon>
+            <span class="label">Download Data</span>
+        </button>
+
+    </div>
+</mat-toolbar>
+    <section class="card-section">
+        <mat-card class="custom-mat-card mat-elevation-z6">
+        <mat-card-header class="custom-mat-card-header">
+            <mat-card-title>Attachments</mat-card-title>
+            <button class="add-btn custom-btn primary-btn" aria-label="upload file" mat-raised-button color="primary" (click)="uploadNewFile()">
+                <mat-icon>add</mat-icon>
+                <div class="label">Add File</div>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="demo-gallery custom-mat-card-content">
+     
+            <ul id="lightgallery" class="row">
+                <ng-container *ngFor="let doc of uploadedDocs">
+                    <li class="col-12 col-lg-4 col-xl-3 col-sm-6 col-md-4" data-responsive *ngIf="doc.fileType =='image'" [attr.data-src]="doc.fileURL">
+                        <a>
+                            <img class="img-responsive" [src]="doc.fileURL">
+                            <div class="demo-gallery-poster">
+                                <img src="https://sachinchoolur.github.io/lightgallery.js/static/img/zoom.png">
+                            </div>
+                        </a>
+                    </li>
+                    <li class="col-12 col-lg-4 col-xl-3 col-sm-6 col-md-4" data-responsive *ngIf="doc.fileType =='pdf'" (click)="openPDFViewer(doc.fileURL)">
+                        <a>
+                            <pdf-viewer class="img-responsive gallery-pdf" [src]="doc.fileURL" [original-size]="false"></pdf-viewer>
+                            <div class="demo-gallery-poster">
+                                <img src="https://sachinchoolur.github.io/lightgallery.js/static/img/zoom.png">
+                            </div>
+                        </a>
+                    </li>
+                </ng-container>
+            </ul>
+            <div *ngIf="uploadedDocs != undefined && uploadedDocs.length == 0">
+                No attachments available
+            </div>
+        </mat-card-content>
+    </mat-card>
+</section>
+<section class="card-section pdf-form">
+    <mat-card class="custom-mat-card mat-elevation-z6">
+        <mat-card-header class="custom-mat-card-header">
+            <mat-card-title>Application Form Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngIf="pageLoad">
+            <form [formGroup]="applicationForm">
+                <div class="row">
+                    <div class="col-12 col-xl-6 col-lg-6">
+                        <div class="pdf-container">
+                            <div class="pdf-inner-container" *ngFor="let doc of primaryDocs">
+                                <pdf-viewer *ngIf="doc.fileType =='pdf'" [src]="doc.fileURL" [original-size]="false"></pdf-viewer>
+                                <img *ngIf="doc.fileType =='img'" [src]="doc.fileURL">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-6 col-lg-6">
+                        <mat-toolbar class="mat-elevation-z6 example-action-buttons custom-expansion-mat-toolbar">
+                            <button mat-button (click)="accordion.openAll()" class="primary-text">Expand All</button>
+                            <button mat-button (click)="accordion.closeAll()" class="primary-text">Collapse All</button>
+                        </mat-toolbar>
+                        <mat-accordion class="example-headers-align" multi>
+                            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">account_circle</mat-icon> Customer / Developer details
+                                    </mat-panel-title>
+
+                                </mat-expansion-panel-header>
+
+                                <section class="form-section">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.requesterNamePrediction]">Requester Name</mat-label>
+                                                <input matInput placeholder="Requester name" formControlName="requesterName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.houseNoAndNamePrediction]">House No/Name</mat-label>
+                                                <input matInput placeholder="Enter House No/Name" formControlName="houseNoAndName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.streetPrediction]">Street</mat-label>
+                                                <input matInput placeholder="Street" formControlName="street">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.townPrediction]">Town</mat-label>
+                                                <input matInput placeholder="Town" formControlName="town">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.countyPrediction]">County</mat-label>
+                                                <input matInput placeholder="County" formControlName="county">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.postCodePrediction]">Post Code</mat-label>
+                                                <input matInput placeholder="Postcode" formControlName="postCode">
+                                            </mat-form-field>
+                                        </div>
+                                        <h3>Requester Contact Information : </h3>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.requesterContactNamePrediction]">Contact Name</mat-label>
+                                                <input matInput placeholder="Contact Name" formControlName="requesterContactName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.requesterContactPrediction]">Contact Telephone</mat-label>
+                                                <input matInput placeholder="Contact Telephone" formControlName="requesterContact">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.requesterEmailIdPrediction]">Email address</mat-label>
+                                                <input matInput placeholder="example smithjohn@gmail.com" formControlName="requesterEmailId">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="form-section">
+                                    <div class="row">
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <article class="form-artile-and-title">
+                                                <h5>Site Address <sub>(if diifrent from above)</sub></h5>
+                                                <!-- <h5>Is the property used for Commercial or Residential purposes? (tick field
+                                                that applies)
+                                            </h5> -->
+                                            </article>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <small id="example-radio-group-label">(Place where work will take place)</small>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="propertyType">
+                                                <mat-radio-button class="col-6 col-lg-6" value="commercial" radioGroup="rGroup">
+                                                    Commercial
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="residential" radioGroup="rGroup">
+                                                    Residential
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteHouseNoAndNamePrediction]">House No/Building Name</mat-label>
+                                                <input matInput placeholder="House No/Building Name" formControlName="siteHouseNoAndName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteStreetPrediction]">Street</mat-label>
+                                                <input matInput placeholder="Street" formControlName="siteStreet">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteTownPrediction]">Town</mat-label>
+                                                <input matInput placeholder="Town" formControlName="siteTown">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteCountyPrediction]">County</mat-label>
+                                                <input matInput placeholder="County" formControlName="siteCounty">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.sitePostCodePrediction]">Post Code</mat-label>
+                                                <input matInput placeholder="Postcode" formControlName="sitePostCode">
+                                            </mat-form-field>
+                                        </div>
+                                        <h3>Site Contact Information : </h3>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteContactNamePrediction]">Contact Name</mat-label>
+                                                <input matInput placeholder="Contact Name" formControlName="siteContactName">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteContactPrediction]">Contact Telephone</mat-label>
+                                                <input matInput placeholder="Contact Number" formControlName="siteContact">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.siteEmailIdPrediction]">Email address</mat-label>
+                                                <input matInput placeholder="example abc@gmail.com" formControlName="siteEmailId">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </section>
+                                <mat-action-row>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">work</mat-icon> Work Required
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+
+                                <section class="work-required tab-section">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <label id="example-radio-group-label">What type of work do you need ?</label>
+                                            <mat-checkbox class="col-12" formControlName="upgradeRequired">
+                                                Alteration/upgrade to existing gas supply
+                                            </mat-checkbox>
+                                            <mat-checkbox class="col-12" formControlName="existPropertyConnection">
+                                                New gas connection to <strong>existing property</strong>
+                                            </mat-checkbox>
+                                            <mat-checkbox class="col-12" formControlName="newPropertyConnection">
+                                                New gas connection to <strong>new property</strong>
+                                            </mat-checkbox>
+                                        </div>
+                                        <div class="row">
+                                            <!-- <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.pipeworkMeteragePrediction]">Meterage of pipework required in Private land?</mat-label>
+                                                <input matInput placeholder="Meterage?" formControlName="pipeworkMeterage">
+                                            </mat-form-field>
+                                        </div> -->
+                                            <div class="col-12">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.noOfConnectionsPrediction]">How many connections/alterations are required?</mat-label>
+                                                    <input type="text" matInput placeholder="Total Connections ?" formControlName="noOfConnections">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label for="">For a single connection/alteration,please tell us your gas usage</label>
+                                            <div class="col-12 col-lg-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.hourlyUsagePrediction]">Peak Hourly*</mat-label>
+                                                    <input required matInput placeholder="Hourly Usage" formControlName="hourlyUsage">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-12 col-lg-6">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.annualUsagePrediction]">Total Annual*</mat-label>
+                                                    <input required matInput placeholder="Annual Usage" formControlName="annualUsage">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">business</mat-icon> About The Property/Site
+                                    </mat-panel-title>
+
+                                </mat-expansion-panel-header>
+
+                                <section class="property-site tab-section">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">ls the property listed?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="propertyListed">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true" radioGroup="rGroup">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false" radioGroup="rGroup">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="gradeType">
+                                            <mat-radio-button class="col-6 col-lg-6" value="grade_1">
+                                                Grade 1
+                                            </mat-radio-button>
+                                            <mat-radio-button class="col-6 col-lg-6" value="grade_2">
+                                                Grade 2
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">ls the preferred meter location for any of
+                                            the work required aboveground floor level?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="workAboveGroundFloor">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">Do properties in your street have gas?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="streetHaveGas">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+
+                                </section>
+
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">location_city</mat-icon> Digging on site
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <section class="digging tab-section">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">Will you be digging the trench on your property where the pipe is to be laid?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="trenchDiggingRequired">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">Will we need to dig on anyone else's land to lay the pipes?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="extraDiggingRequired">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+
+                                </section>
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">speed</mat-icon> Gas meters and housings
+                                    </mat-panel-title>
+
+                                </mat-expansion-panel-header>
+                                <section class="gas-meter tab-section">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">Do you require a gas meter
+                                            housing?</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="gasMeterRequired">
+                                                <mat-radio-button class="col-6 col-lg-6" value="true">
+                                                    Yes
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-6 col-lg-6" value="false">
+                                                    No
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <h4>We supply the following housings</h4>
+                                        <mat-checkbox class="col-6 col-md-3 col-xl-3 col-lg-3 col-sm-3" formControlName="gasMeterSurfaceMounted">
+                                            <h5>Surface mounted</h5>
+                                            <img class="img-responsive" src="../../assets/img/img-1.png" alt="picture">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Count</mat-label>
+                                                <input required matInput placeholder="count" formControlName="gasMeterSurfaceMountedCount">
+                                            </mat-form-field>
+                                        </mat-checkbox>
+                                        <mat-checkbox class="col-6 col-md-3 col-xl-3 col-lg-3 col-sm-3" formControlName="gasMeterFreeStanding">
+                                            <h5>Free-standing Kiosk</h5>
+
+                                            <img class="img-responsive" src="../../assets/img/img-2.png" alt="picture">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Count</mat-label>
+                                                <input required matInput placeholder="count" formControlName="gasMeterFreeStandingCount">
+                                            </mat-form-field>
+                                        </mat-checkbox>
+                                        <mat-checkbox class="col-6 col-md-3 col-xl-3 col-lg-3 col-sm-3" formControlName="gasMeterMountedKiosk">
+                                            <h5>Surface mounted Kiosk</h5>
+                                            <img class="img-responsive" src="../../assets/img/img-3.png" alt="picture">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Count</mat-label>
+                                                <input required matInput placeholder="count" formControlName="gasMeterMountedKioskCount">
+                                            </mat-form-field>
+                                        </mat-checkbox>
+                                        <mat-checkbox class="col-6 col-md-3 col-xl-3 col-lg-3 col-sm-3" formControlName="gasMeterSemiConcealed">
+                                            <h5>Semi-Concealed</h5>
+                                            <img class="img-responsive" src="../../assets/img/img-4.png" alt="picture">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Count</mat-label>
+                                                <input required matInput placeholder="count" formControlName="gasMeterSemiConcealedCount">
+                                            </mat-form-field>
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="row">
+                                        <label for="">What are the meter dimensions?</label>
+                                        <div class="col-12 col-lg-4 col-xl-4 col-sm-4 col-md-4">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.meterHeightPrediction]">Height:</mat-label>
+                                                <input type="text" required matInput placeholder="Meter Height" formControlName="meterHeight">
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-12 col-lg-4 col-xl-4 col-sm-4 col-md-4">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.meterWidthPrediction]">Width:</mat-label>
+                                                <input type="text" required matInput placeholder="Meter Width" formControlName="meterWidth">
+                                            </mat-form-field>
+
+                                        </div>
+                                        <div class="col-12 col-lg-4 col-xl-4 col-sm-4 col-md-4">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.meterDepthPrediction]">Depth:</mat-label>
+                                                <input type="text" required matInput placeholder="Meter Depth" formControlName="meterDepth">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </section>
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                    <button mat-button color="primary" (click)="nextStep()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel [expanded]="step === 5" (opened)="setStep(5)">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <mat-icon class="mr-2">info</mat-icon> Information for large-scale gas usage
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <section class="information tab-section">
+                                    <div class="row">
+                                        <label for="">For connections to non-domestic properties, please describe below what
+                                        the supply will be used for. </label>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.supplyUsagePrediction]">Please add some description</mat-label>
+                                                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" formControlName="supplyUsage">
+                                            </textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="">How much pressure do you need? <small>(if known)</small> </label>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.pressureAmountPrediction]">mbar</mat-label>
+                                                <input matInput placeholder formControlName="pressureAmount">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">Will you be using any of the following?</label>
+                                            <mat-checkbox class="col-12" formControlName="boosterComponentRequired">Booster</mat-checkbox>
+                                            <mat-checkbox class="col-12" formControlName="compressorComponentRequired">Compressor</mat-checkbox>
+                                            <mat-checkbox class="col-12" formControlName="heatingComponentRequired">Comunnity heating (CHP)</mat-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label id="example-radio-group-label">lf you are using a compressor, please give details of type:</label>
+                                            <mat-radio-group class="row" aria-labelledby="example-radio-group-label" formControlName="compressorType">
+                                                <mat-radio-button class="col-12 col-lg-6" value="reciprocating">
+                                                    Reciprocating
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-12 col-lg-6" value="fan">
+                                                    Fan
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-12 col-lg-6" value="screw">
+                                                    Screw
+                                                </mat-radio-button>
+                                                <mat-radio-button class="col-12 col-lg-6" value="other">
+                                                    Other
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="">Time taken to achieve full load from start-up</label>
+                                        <div class="col-12">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label [ngClass]="{'true' : 'right-predict', 'false' : 'wrong-predict'}[fieldPredictObj.loadStartUpTimePrediction]">seconds</mat-label>
+                                                <input type="text" matInput placeholder="Time required" formControlName="loadStartUpTime">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </section>
+                                <mat-action-row>
+                                    <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button class="right-5 primary-text" type="button" mat-stroked-button color="primary" (click)="backToDashboard()">Back</button>
+            <button class="draft-btn right-5" type="button" mat-stroked-button color="primary" (click)="draftSave()" *ngIf="applicationStatus === 0  || applicationStatus === 1">Save as draft</button>
+            <button class="warn right-5" type="button" mat-raised-button mat-focused color="warning" (click)="updateHoldStatus(1)" *ngIf="applicationStatus === 0  || applicationStatus === 1">On Hold</button>
+            <button class="reje right-5" type="button" mat-raised-button mat-focused color="warn" (click)="updateStatus(3)" *ngIf="applicationStatus === 0  || applicationStatus === 1">Reject</button>
+            <button class="appr right-5" type="submit" mat-raised-button mat-focused color="success" (click)="updateStatus(2)" *ngIf="applicationStatus === 0  || applicationStatus === 1">Approve</button>
+        </mat-card-actions>
+    </mat-card>
+</section>

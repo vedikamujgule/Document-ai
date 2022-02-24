@@ -1,0 +1,120 @@
+@import "../../../styles.scss";
+
+.login-page{
+    height: 100%;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: multiply;
+    background-image: url(../../../assets/img/login-img.jpg);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgb(250,70,22);
+        background: -moz-linear-gradient(450deg, rgba(250,70,22,1) 0%, rgba(6,85,72,1) 100%);
+        background: -webkit-linear-gradient(450deg, rgba(250,70,22,1) 0%, rgba(6,85,72,1) 100%);
+        background: linear-gradient(450deg, rgba(250,70,22,1) 0%, rgba(6,85,72,1) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fa4616",endColorstr="#065548",GradientType=1);
+        opacity: 0.8; 
+        // backdrop-filter: blur(3px);
+      }
+      &.dark-theme{
+        // background-image: url(../../assets/img/back-img.jpg);
+        // background-color: transparent;
+        background-size: cover !important;
+        // background-image: url(../../assets/img/cadent-map.png);
+        background: rgb(6,85,72);
+        background: url(../../../assets/img/map.png) no-repeat center, radial-gradient(circle, rgba(6,85,72,1) 0%, rgba(33,33,33,1) 80%);
+        
+        .custom-mat-card{
+            background-color: rgba(37, 37, 37, 0.78);
+            backdrop-filter: blur(20px);
+        }
+        &::before{
+            // background-color: transparent;
+            // background: none;
+            background: rgb(6,85,72);
+            background: radial-gradient(circle, rgba(6,85,72,1) , rgba(33,33,33,1) );
+            // opacity: .6;
+            backdrop-filter: blur(0px);
+            background: none;
+        }
+    }
+}
+.custom-mat-grid-tile {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
+}
+
+.custom-mat-button {
+    width: 100%;
+    height: 46px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.custom-mat-card {
+    border-radius: 1.5rem !important;
+    max-width: 350px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    .mat-card-header {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        img {
+            display: block;
+            margin: auto;
+            padding-bottom: 1rem;
+        }
+    }
+    // mat-card-content {
+    //     padding: 1.50rem auto 24px;
+    // }
+    padding: 1rem 2rem 2rem;
+    text-align: center;
+    mat-card-actions {
+        text-align: center;
+        button{
+            height: auto;
+            font-weight: normal;
+            width: auto;
+            line-height: 1;
+            padding: 0px 0px 0px 8px;
+            text-decoration: underline;
+        }
+        .mat-card-subtitle{
+            font-weight: 300;
+            margin: 0px;
+        }
+    }
+}
+.add-user-section{
+    margin: 20px;
+}
+.margin-15{
+    margin-top: 15px;
+}
+.content-box {
+    overflow: hidden;
+    width: 100%;
+}
+.main-card{
+    width: 30vw;
+}
+.select-box{
+    width: 50vw;
+}

@@ -1,0 +1,16 @@
+<main class="wrapper mat-app-background" [ngClass]="isDarkTheme? 'dark-theme':'light-theme'">
+    <mat-sidenav-container class="example-container " autosize>
+        <mat-sidenav #drawer class="custom-sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)" fullscreen>            <app-sidenav *ngIf="sidenav && !isLoginPage"></app-sidenav>
+        </mat-sidenav>
+        <mat-sidenav-content class="example-sidenav-content">
+
+            <header class="header" *ngIf="!isLoginPage">
+                <app-header *ngIf="header " (SideNavToggle)="drawer.toggle()"></app-header>
+            </header>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</main>
+<!-- <mat-slide-toggle *ngIf="!isLoginPage" [ngClass]="isDarkTheme? 'dark-theme':'light-theme'" [(ngModel)]="isDarkTheme" labelPosition="before" (change)="storeThemeSelection()" class="toggleTheme">
+</mat-slide-toggle> -->
+<ngx-ui-loader bgsColor='#fa4616' fgsColor='#ff7b46'></ngx-ui-loader>

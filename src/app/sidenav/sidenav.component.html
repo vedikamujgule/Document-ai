@@ -1,0 +1,6 @@
+<mat-nav-list *ngIf="isLoggedIn$ | async as isLoggedIn" class="custom-nav-list">
+    <mat-list-item class="menu-item" routerLink='/dashboard' routerLinkActive="active">
+        <mat-icon matListIcon>space_dashboard</mat-icon>
+        <a matLine class="side-nav-item">dashboard</a>
+    </mat-list-item>
+</mat-nav-list>

@@ -1,0 +1,338 @@
+@import '../../../color-var.scss';
+.example-action-buttons {
+    padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.example-headers-align .mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}
+
+::ng-deep {
+    .mat-expansion-panel {
+        border-radius: 0px !important;
+        box-shadow: none !important;
+        border-bottom: 1px solid $netrual;
+    }
+    .mat-accordion {
+        height: 50vh;
+        overflow: auto;
+        display: inline-block;
+        border: 1px solid rgb(0 0 0 / 12%);
+    }
+    .information {
+        .mat-radio-group {
+            margin-bottom: 0px;
+            .mat-radio-button {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+    .tab-section {
+        .row {
+            margin-bottom: 1rem;
+            label {
+                margin-bottom: .50rem;
+            }
+        }
+    }
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-content {
+                .mat-panel-title {
+                    .mat-icon {
+                        margin-right: 1rem;
+                    }
+                }
+            }
+        }
+    }
+    .gas-meter {
+        .mat-checkbox-label {
+            img {
+                width: 100%;
+                height: 130px;
+                margin-bottom: .50rem;
+            }
+            .mat-form-field-infix {
+                width: 100%;
+            }
+            h5 {
+                width: 100%;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+        .mat-checkbox-inner-container {
+            top: 50%;
+            right: 1rem;
+            position: absolute;
+        }
+    }
+    .work-required {
+        .mat-checkbox-label {
+            strong {
+                color: $primary;
+            }
+        }
+    }
+    .mat-checkbox-label {
+        white-space: normal;
+    }
+    .example-radio-group {
+        display: flex;
+        flex-direction: row;
+    }
+    .pdf-container {
+        position: relative;
+        border: 1px solid $netrual;
+        height: 58vh;
+    }
+    pdf-viewer {
+        display: block;
+    }
+    .ng2-pdf-viewer-container {
+        .canvasWrapper,
+        .page,
+        canvas {
+            width: 100% !important;
+        }
+    }
+    .pdfViewer .page canvas {
+        width: 100% !important;
+        height: 100%;
+    }
+}
+.appr{
+    background-color: green;
+    color: white;
+}
+.reje{
+    background-color: red;
+    color: white;
+}
+.warn{
+    background-color: orange;
+    color: white;
+}
+// LIGHTGALLERY
+.cont {
+    text-align: center;
+}
+
+.page-head {
+    padding: 60px 0;
+    text-align: center;
+}
+
+.page-head .lead {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.4;
+    margin-bottom: 50px;
+    margin-top: 0;
+}
+
+.demo-gallery>ul {
+    margin-bottom: 0;
+    display: flex;
+    flex-flow: wrap;
+    padding: 0px;
+    margin: 0px;
+}
+
+.demo-gallery>ul>li {
+    flex-grow: 1;
+    display: inline-block;
+    margin: 5px;
+    max-width: 200px;
+    overflow: hidden;
+}
+
+.demo-gallery>ul>li a {
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    padding: .50rem;
+}
+
+.demo-gallery>ul>li a>img {
+    -webkit-transition: -webkit-transform 0.15s ease 0s;
+    -moz-transition: -moz-transform 0.15s ease 0s;
+    -o-transition: -o-transform 0.15s ease 0s;
+    transition: transform 0.15s ease 0s;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    height: 100%;
+    width: 100%;
+}
+
+.demo-gallery>ul>li a:hover>img {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+
+.demo-gallery>ul>li a:hover .demo-gallery-poster>img {
+    opacity: 1;
+}
+
+.demo-gallery>ul>li a .demo-gallery-poster {
+    background-color: rgba(0, 0, 0, 0.1);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-transition: background-color 0.15s ease 0s;
+    -o-transition: background-color 0.15s ease 0s;
+    transition: background-color 0.15s ease 0s;
+}
+
+.demo-gallery>ul>li a .demo-gallery-poster>img {
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    -webkit-transition: opacity 0.3s ease 0s;
+    -o-transition: opacity 0.3s ease 0s;
+    transition: opacity 0.3s ease 0s;
+}
+
+.demo-gallery>ul>li a:hover .demo-gallery-poster {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.demo-gallery .justified-gallery>a>img {
+    -webkit-transition: -webkit-transform 0.15s ease 0s;
+    -moz-transition: -moz-transform 0.15s ease 0s;
+    -o-transition: -o-transform 0.15s ease 0s;
+    transition: transform 0.15s ease 0s;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    height: 100%;
+    width: 100%;
+}
+
+.demo-gallery .justified-gallery>a:hover>img {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1);
+    transform: scale3d(1.1, 1.1, 1.1);
+}
+
+.demo-gallery .justified-gallery>a:hover .demo-gallery-poster>img {
+    opacity: 1;
+}
+
+.demo-gallery .justified-gallery>a .demo-gallery-poster {
+    background-color: rgba(0, 0, 0, 0.1);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-transition: background-color 0.15s ease 0s;
+    -o-transition: background-color 0.15s ease 0s;
+    transition: background-color 0.15s ease 0s;
+}
+
+.demo-gallery .justified-gallery>a .demo-gallery-poster>img {
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    -webkit-transition: opacity 0.3s ease 0s;
+    -o-transition: opacity 0.3s ease 0s;
+    transition: opacity 0.3s ease 0s;
+}
+
+.demo-gallery .justified-gallery>a:hover .demo-gallery-poster {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.demo-gallery .video .demo-gallery-poster img {
+    height: 48px;
+    margin-left: -24px;
+    margin-top: -24px;
+    opacity: 0.8;
+    width: 48px;
+}
+
+.demo-gallery.dark>ul>li a {
+    border: 3px solid #04070a;
+}
+
+@media (max-width:767px) {
+    .demo-gallery>ul>li {
+        max-width: 165px;
+    }
+}
+.approved-form{
+    font-weight: 600;
+    font-size: 16px;
+    color: green;
+    margin-bottom: 10px;
+}
+.rejected-form{
+    font-weight: 600;
+    font-size: 16px;
+    color: green;
+    margin-bottom: 10px;
+}
+.action-btn{
+    font-size: 15px;
+    background-color: white;
+}
+.form-header-btn{
+    margin-left: auto;
+    margin-right: 10px;
+}
+.margin-right-5{
+    margin-right: 5px;
+}
+.right-predict{
+    color: green;
+    font-weight: 600;
+    font-size: 16px;
+}
+.wrong-predict{
+    color: red;
+    font-weight: 600;
+    font-size: 15px;
+}
+.draft-btn{
+    background-color: cadetblue;
+    color: white !important;
+}
+// .attached-btn{
+//     border-radius: 50%;
+//     color: white !important;
+// }
+.gallery-pdf{
+    width: 500px;
+    height: 150px;
+
+}
+.item-header{
+    font-size: 20px;
+    font-weight: 500;
+}
+.item-sub-header{
+    font-weight: 500;
+}
+.demo-gallery-poster{
+    cursor: pointer;
+}

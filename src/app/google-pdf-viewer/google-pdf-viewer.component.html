@@ -1,0 +1,16 @@
+<div class="msg-dialog wec-dialog">
+    <h2 mat-dialog-title>PDF Details</h2>
+    <mat-dialog-content class="mat-typography pdf-view-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <pdf-viewer class="pdf-responsive" [src]="pdfURL" [original-size]="false"></pdf-viewer>
+                </div>
+            </div>
+
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="padding-bottom-30 pdf-view-action">
+       <button class="mat-raised-button cancel_button primary-text" (click)="close()">Close</button>
+    </mat-dialog-actions>
+ </div>

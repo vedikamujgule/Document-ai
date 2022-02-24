@@ -1,0 +1,50 @@
+// 1. Background (0dp elevation surface overlay)
+// 2. Surface (with 1dp elevation surface overlay)
+// 3. Primary
+// 4. Secondary
+// 5. On background
+// 6. On Surface
+// 7. On Primary
+// 8. On Secondary
+@import '../src/color-var.scss';
+@import '~@angular/material/theming';
+@include mat-core();
+$cadent-theme-primary:mat-palette($mat-red, 500);
+$cadent-theme-accent:mat-palette($mat-deep-orange, 500, A200, A100, A400);
+$cadent-theme-warn:mat-palette($mat-red);
+// Dark
+$cadent-dark-theme: mat-dark-theme((color: (primary: $cadent-theme-primary, accent: $cadent-theme-accent)));
+.dark-theme {
+    @include angular-material-theme($cadent-dark-theme);
+}
+
+// Light
+$cadent-light-theme: mat-light-theme((color:( primary:$cadent-theme-primary, accent: $cadent-theme-accent), ));
+@include angular-material-theme($cadent-light-theme);
+.custom-sidenav {
+    background-color: #263238;
+    .mat-list-item {
+        .mat-list-item-content {
+            color: rgba(255, 255, 255, 0.87);
+        }
+    }
+}
+
+.light-theme {
+    .mat-list-base .mat-list-item {
+        text-transform: capitalize !important;
+        font-weight: 300;
+    }
+    .mat-error {
+        display: flex;
+        align-items: center;
+        mat-icon {
+            color: $danger;
+            margin-right: 8px;
+            font-size: 16px;
+            position: relative;
+            top: -1px;
+        }
+        color: rgb(0 0 0 / 60%) !important;
+    }
+}

@@ -1,0 +1,356 @@
+<mat-toolbar class="custom-mat-toolbar custom-mat-toolbar-heading">
+    <span class="custom-title">Application No - NS-{{ fileNo }}</span>
+    <span class="example-spacer"></span>
+    <div class="form-header-btn">
+        <button mat-stroked-button color="primary" class="white-bg action-btn margin-right-5 primary-text" aria-label="view history"
+            (click)="fetchHistory()">
+            <mat-icon>history</mat-icon>
+            View history
+        </button>
+        <button mat-stroked-button color="primary" class="white-bg action-btn primary-text" aria-label="download product report"
+            (click)="downloadProductReport()">
+            <mat-icon>file_download</mat-icon>
+            Download data
+        </button>
+    </div>
+</mat-toolbar>
+<section class="card-section">
+    <mat-card class="custom-mat-card mat-elevation-z6">
+        <mat-card-header class="custom-mat-card-header">
+            <mat-card-title>Attachments</mat-card-title>
+            <button mat-stroked-button color="primary" class="form-header-btn attached-btn" aria-label="upload file"
+                (click)="uploadNewFile()">
+                <mat-icon>add</mat-icon>
+            </button>
+        </mat-card-header>
+        <mat-card-content class="demo-gallery">
+            <ul id="lightgallery">
+                <ng-container *ngFor="let doc of uploadedDocs">
+                    <li data-responsive="" *ngIf="doc.fileType =='image'" [attr.data-src]="doc.fileURL">
+                        <a>
+                            <img class="img-responsive" [src]="doc.fileURL">
+                            <div class="demo-gallery-poster">
+                                <img src="https://sachinchoolur.github.io/lightgallery.js/static/img/zoom.png">
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- <li data-responsive="" *ngIf="doc.fileType =='pdf'" [attr.data-src]="doc.fileURL" data-iframe="true"
+                        id="open-pdf">
+                        <a>
+                            <pdf-viewer class="img-responsive gallery-pdf" [src]="doc.fileURL" [original-size]="false">
+                            </pdf-viewer>
+                            <div class="demo-gallery-poster">
+                                <img src="https://sachinchoolur.github.io/lightgallery.js/static/img/zoom.png">
+                            </div>
+                        </a>
+                    </li> -->
+                </ng-container>
+            </ul>
+            <ul >
+                <ng-container *ngFor="let doc of uploadedDocs">
+                
+
+                <li  data-responsive="" *ngIf="doc.fileType =='pdf'" (click)="openPDFViewer(doc.fileURL)">  
+                    <a>
+                         <pdf-viewer class="img-responsive gallery-pdf" [src]="doc.fileURL" [original-size]="false"></pdf-viewer>
+                         <div class="demo-gallery-poster">
+                            <img src="https://sachinchoolur.github.io/lightgallery.js/static/img/zoom.png">
+                        </div>
+                    </a>
+                </li>
+                </ng-container>
+        </ul>
+            <div *ngIf="uploadedDocs != undefined && uploadedDocs.length == 0">
+                No attachments available
+            </div>
+        </mat-card-content>
+    </mat-card>
+</section>
+<section class="card-section pdf-form">
+    <mat-card class="custom-mat-card mat-elevation-z6">
+        <mat-card-header class="custom-mat-card-header">
+            <mat-card-title>Application Form Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngIf="pageLoad">
+            <form [formGroup]="applicationForm">
+                <div class="row">
+                    <div class="col-12 col-xl-12 col-lg-12">
+                        <section class="form-section">
+                            <div class="row">
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('actingCapacity')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>What Capacity Are You Acting In?</mat-label>
+                                        <input matInput placeholder="WHAT CAPACITY ARE YOU ACTING IN?"
+                                            formControlName="actingCapacity">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('companyName')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Please let us know your company name</mat-label>
+                                        <input matInput placeholder="Please let us know your company name"
+                                            formControlName="companyName">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('requesterName')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Name</mat-label>
+                                        <input matInput placeholder="Name" formControlName="requesterName">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('requesterEmail')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Email</mat-label>
+                                        <input matInput placeholder="Email" formControlName="requesterEmail">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('requesterContact')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Phone</mat-label>
+                                        <input matInput placeholder="Phone" formControlName="requesterContact">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('requesterAddress')" >
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Address</mat-label>
+                                        <input matInput placeholder="Address" formControlName="requesterAddress">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('contactType')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>HOW WOULD YOU LIKE TO BE CONTACTED?</mat-label>
+                                        <input matInput placeholder="Type of contact" formControlName="contactType">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('isAnotherPersonApplied')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Are you applying on behalf of another Person/Company?</mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isAnotherPersonApplied">
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('letterOfAuthority')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>PLEASE ATTACH YOUR LETTER OF AUTHORITY (LOA) FROM THE PERSON/COMPANY YOU ARE REPRESENTING</mat-label>
+                                        <input matInput placeholder="Letter Of Authority(LOA) Name" formControlName="letterOfAuthority">
+                                    </mat-form-field>
+                                </div> -->
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('payeeDetails')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Who Will Be Paying for the Final Quotation?</mat-label>
+                                        <input matInput placeholder="Payee Details" formControlName="payeeDetails">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('typeOfService')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>What Type of Service Do You Require?</mat-label>
+                                        <input matInput placeholder="Service Type" formControlName="typeOfService">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('newConnections')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>How Many New Connections Do You Need?</mat-label>
+                                        <input matInput placeholder="New Connections" formControlName="newConnections">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('totalConnections')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Total Connections</mat-label>
+                                        <input matInput placeholder="Total Connections"
+                                            formControlName="totalConnections">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('actualCost')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Cost</mat-label>
+                                        <input matInput placeholder="Cost" formControlName="actualCost">
+                                    </mat-form-field>
+                                </div>
+
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('quotationChargePayer')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Who Will Be Paying the Quotation/Admin Charge?</mat-label>
+                                        <input matInput placeholder="" formControlName="quotationChargePayer">
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('acknowlegementConfirm')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>PLEASE SIGN HERE TO CONFIRM YOUR ACKNOWLEDGEMENT OF THE QUOTATION
+                                            CHARGE.</mat-label>
+                                        <input matInput placeholder="" formControlName="acknowlegementConfirm">
+                                    </mat-form-field>
+                                </div> -->
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('siteContact')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Who Will Be the Site Contact for These Works?</mat-label>
+                                        <input matInput placeholder="" formControlName="siteContact">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('siteAddress')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Site Address</mat-label>
+                                        <input matInput placeholder="" formControlName="siteAddress">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('siteType')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Site Type</mat-label>
+                                        <input matInput placeholder="" formControlName="siteType">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('developmentStage')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Development Stage</mat-label>
+                                        <input matInput placeholder="" formControlName="developmentStage">
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('locationPlanAttachment')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>LOCATION PLAN</mat-label>
+                                        <input matInput placeholder="" formControlName="locationPlanAttachment">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('sitePlanAttachment')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>SITE PLAN</mat-label>
+                                        <input matInput placeholder="" formControlName="sitePlanAttachment">
+                                    </mat-form-field>
+                                </div> -->
+
+                                <!-- If we have no of items-->
+                                <div *ngIf="applicationForm.get('items')['controls'].length > 0">
+                                <h3 class="item-header">Please complete the table below</h3>
+                                <div formArrayName="items"
+                                *ngFor="let item of applicationForm.get('items')['controls']; let i = index;">
+                                    <div class="row" [formGroupName]="i">
+                                        <h4 class="item-sub-header">Item {{i+1}} </h4>
+                                        <div  class="col-12 col-xl-6 col-lg-6">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Property Type</mat-label>
+                                                <input matInput placeholder="" formControlName="propertyType">
+                                            </mat-form-field>
+                                        </div>
+                                        <div  class="col-12 col-xl-6 col-lg-6" >
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Number Of Properties</mat-label>
+                                                <input matInput placeholder="" formControlName="noOfProperties">
+                                            </mat-form-field>
+                                        </div>
+                                        <div  class="col-12 col-xl-6 col-lg-6" >
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Peak Instantaneous Load (Kw)</mat-label>
+                                                <input matInput placeholder="" formControlName="peakLoad">
+                                            </mat-form-field>
+                                        </div>
+                                        <div  class="col-12 col-xl-6 col-lg-6" >
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Annual Load (KW)</mat-label>
+                                                <input matInput placeholder="" formControlName="annualLoad">
+                                            </mat-form-field>
+                                        </div>
+                                        <div  class="col-12 col-xl-6 col-lg-6" >
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Type of Meter Housing</mat-label>
+                                                <input matInput placeholder="" formControlName="meterType">
+                                            </mat-form-field>
+                                        </div>
+                                        <div  class="col-12 col-xl-6 col-lg-6" >
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Who To Supply Housing?</mat-label>
+                                                <input matInput placeholder=""  formControlName="whoToSupply">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                 <!-- If we have no of items ends-->
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('gasUsage')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>What Is Your Peak Gas Usage? (Kw)</mat-label>
+                                        <input matInput placeholder="" formControlName="gasUsage">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('annualUsage')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>What Is Your Annual Gas Usage? (Kw)</mat-label>
+                                        <input matInput placeholder="" formControlName="annualUsage">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('isMeterInsideProperty')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Is the Meter Located Inside the Property?</mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isMeterInsideProperty">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('isMeterInstallByCadent')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Do You Want Cadent to Install Your Meter Housing?</mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isMeterInstallByCadent">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('meterType')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>What Type of Meter Housing Do You Require?</mat-label>
+                                        <input matInput placeholder="" formControlName="meterType">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('concreteBaseProvider')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Who Will Provide the Concrete Base? </mat-label>
+                                        <input matInput placeholder="" formControlName="concreteBaseProvider">
+                                    </mat-form-field>
+                                </div>
+
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('isOnsiteExcavationReq')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Is On-site Excavation Required by Cadent? </mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isOnsiteExcavationReq">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('isElevatedPressureRequired')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Is Elevated Pressure Required? </mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isElevatedPressureRequired">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-6 col-lg-6" *ngIf="!isEmpty('componentsRequired')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Will You Be Installing Any of the Following On-site? </mat-label>
+                                        <input matInput placeholder="" formControlName="componentsRequired">
+                                    </mat-form-field>
+                                </div>
+                                <div  class="col-12 col-xl-12 col-lg-12" *ngIf="!isEmpty('additionalInfo')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Please Provide Us with Any Additional Information You Think Would Be Important to Your Request.</mat-label>
+                                        <input matInput placeholder="" formControlName="additionalInfo">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-12 col-xl-12 col-lg-12" *ngIf="!isEmpty('isConfirmed')">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Please Tick This Box to Confirm You Have Read and Understood This and Are Happy to Proceed. </mat-label>
+                                        <input matInput placeholder="Yes/No" formControlName="isConfirmed">
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            
+                            
+                        </section>
+                    </div>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <button type="button" mat-stroked-button class="right-5 primary-text" color="primary"
+                (click)="backToDashboard()">Cancel</button>
+            <button type="button" mat-stroked-button class="draft-btn right-5" color="primary"
+                (click)="draftSave()">Save as draft</button>
+            <button type="button" mat-raised-button mat-focused color="warning" class="warn right-5"
+                (click)="updateHoldStatus(1)">On Hold</button>
+            <button type="button" mat-raised-button mat-focused color="warn" class="reje right-5"
+                (click)="updateStatus(3)">Reject</button>
+            <button type="submit" mat-raised-button mat-focused color="success" class="appr right-5"
+                (click)="updateStatus(2)">Approve</button>
+        </mat-card-actions>
+    </mat-card>
+</section>

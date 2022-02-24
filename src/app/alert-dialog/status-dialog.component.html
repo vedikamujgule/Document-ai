@@ -1,0 +1,20 @@
+<div class="msg-dialog wec-dialog">
+    <h2 mat-dialog-title>Hold/Approve/Reject Request</h2>
+    <mat-dialog-content class="mat-typography pl-3">
+       <div class="row pl-3 pr-3">
+         <label for="">Please add some reason to hold/approve/reject this application</label>
+         <div class="col-12">
+             <mat-form-field appearance="outline">
+                 <mat-label>Reason for action</mat-label>
+                 <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                     cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" [(ngModel)]="actionReason"></textarea>
+             </mat-form-field>
+         </div>
+     </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="padding-bottom-30">
+        <button class="mat-raised-button mat-primary right-10" mat-button [mat-dialog-close]="actionReason"  cdkFocusInitial>Submit</button>
+       <button class="mat-raised-button primary-text" (click)="close()">Cancel</button>
+
+    </mat-dialog-actions>
+ </div>

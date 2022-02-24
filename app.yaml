@@ -1,0 +1,31 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+service: default
+env_variables:
+  API_KEY: AIzaSyDoTXKBJv7AHYoCiC57RtpWk_JVOeHn5dc
+
+handlers:
+
+  - url: /
+    static_files: dist/cadent/index.html
+    upload: dist/cadent/index.html
+  - url: /
+    static_dir: dist/cadent
+
+  - url: /(.*\.(gif|png|jpg|css|js)(|\.map))$
+    static_files: dist/cadent\1
+    upload: dist/cadent/(.*)(|\.map)
+
+  - url: /(.*)
+    static_files: dist/cadent/index.html
+    upload: dist/cadent/index.html
+
+skip_files:
+  - e2e/
+  - node_modules/
+  - src/
+  - ^(.*/)?\..*$ 
+  - ^(.*/)?.*\.md$
+  - ^(.*/)?.*\.yaml$
+  - ^LICENSE

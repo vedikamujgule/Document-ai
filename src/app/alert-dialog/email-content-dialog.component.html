@@ -1,0 +1,21 @@
+<div class="msg-dialog wec-dialog">
+   <h2 mat-dialog-title>Email Content</h2>
+   <mat-dialog-content class="mat-typography">
+
+      <h4 *ngIf="emailSubject != null || emailSubject != undefined">
+         Subject :- {{ emailSubject }}
+      </h4>
+      <h4 *ngIf="emailSubject == null || emailSubject == undefined">
+         Subject :- No Subject found
+      </h4>
+      <h4 *ngIf="data != null || data != undefined">
+         Content :- {{ data }}
+      </h4>
+      <h4 *ngIf="data == null || data == undefined">
+         Content :- No content found
+      </h4>
+   </mat-dialog-content>
+   <mat-dialog-actions class="padding-bottom-30">
+      <button class="mat-raised-button primary-text" (click)="close()">Okay</button>
+   </mat-dialog-actions>
+</div>

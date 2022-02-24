@@ -1,0 +1,23 @@
+<div class="main-card">
+    <h2 mat-dialog-title>Assign Agent</h2>
+    <mat-dialog-content class="mat-typography content-box pl-3" [formGroup]="addUserForm">
+        <!-- <form >  </form> -->
+        <section class="add-user-section">
+            <div class="row select-box">
+                <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6 margin-15">
+                      <mat-form-field appearance="outline">
+                    <mat-select placeholder="Select Agent" formControlName="agentId">
+                        <mat-option [value]="agentList.userId" *ngFor="let agentList of agents">{{agentList.firstName+" "+agentList.lastName}} ({{agentList.emailId}})
+                        </mat-option>
+                    </mat-select>
+            </mat-form-field>
+                </div>
+            </div>
+        </section>
+    </mat-dialog-content>
+    <mat-dialog-actions class="padding-bottom-30">
+        <button mat-raised-button color="primary" class="custom-btn primary-btn mat-primary" (click)="setAgent();close()"
+            type="submit">Save</button>
+        <button mat-stroked-button class="custom-btn primary-text" color="primary" (click)="close()" type="button">Cancel</button>
+    </mat-dialog-actions>
+</div>

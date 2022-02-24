@@ -1,0 +1,70 @@
+@import '../../color-var.scss';
+.custom-mat-header-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+ ::ng-deep {
+    .custom-avatar {
+        display: flex;
+        align-items: center;
+        .welcome-user {
+            margin-right: .75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            color: black;
+        }
+        .mat-icon {
+            font-size: 48px;
+            height: auto;
+            width: auto;
+            padding: 0;
+            color: $primary;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+    }
+    .light-theme {
+        .dark-logo {
+            display: none;
+        }
+        .light-logo {
+            display: block;
+        }
+        .custom-mat-header-toolbar {
+            background-color: #fff;
+            button {
+                color: #000;
+            }
+        }
+    }
+    .dark-theme {
+        .mat-toolbar {
+            .welcome-user {}
+        }
+        .dark-logo {
+            display: block;
+        }
+        .light-logo {
+            display: none;
+        }
+    }
+    .logo {}
+    @media (max-width:767px) {
+        .custom-mat-header-toolbar {
+            .logo {
+                width: 60px;
+            }
+            .mat-icon-button {
+                line-height: 1;
+            }
+        }
+    }
+}

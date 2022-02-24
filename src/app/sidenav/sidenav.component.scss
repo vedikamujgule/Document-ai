@@ -1,0 +1,50 @@
+@import '../../styles.scss';
+@import '../../color-var.scss';
+::ng-deep {
+    .dark-theme {
+        .custom-sidenav {
+            .mat-list-item {
+                &.active,
+                &:focus,
+                &:hover {
+                    background-color: rgb(250 70 22 / 15%);
+                    .mat-list-item-content {
+                        color: $primary !important;
+                    }
+                }
+            }
+        }
+    }
+    .custom-sidenav {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        mat-nav-list {
+            width: 230px;
+        }
+        .mat-list-item {
+            width: 95% !important;
+            border-radius: 0px 50px 50px 0px;
+            transition: all ease .5s;
+            &.active,
+            &:focus,
+            &:hover {
+                background-color: $on-background !important;
+                color: $primary !important;
+                .mat-list-item-content {
+                    color: $primary !important;
+                }
+            }
+        }
+    }
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar,
+.mat-list-base .mat-list-option.mat-list-item-with-avatar {
+    height: 50px;
+}
+
+.side-nav-item {
+    text-transform: capitalize;
+}

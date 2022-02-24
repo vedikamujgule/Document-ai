@@ -1,0 +1,16 @@
+<mat-toolbar class="custom-mat-header-toolbar mat-elevation-z4" color="primary">
+    <button type="button" class="primary-text" aria-label="Toggle sidenav" mat-icon-button (click)="openSidenav()">
+      <mat-icon aria-label="Side nav toggle icon pr`">menu</mat-icon>
+    </button>
+    <a href="/#/dashboard">
+        <img class="light-logo logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfpgAxLW82tjwqWxETWwFPPfmRPpC9n_7A2VpFgBpAF792YBSKDaVHWIOUyE1VV-ImXhI&usqp=CAU" alt="logo" width="150">
+        <!-- <img class="dark-logo logo" src="../../assets/img/logo-white.png" alt="logo" width="80"> -->
+    </a>
+    <span class="example-spacer"></span>
+    <div class="custom-avatar">
+        <span class="welcome-user">Welcome, User Name </span>
+        <!-- <span class="welcome-user">Welcome, {{ userName | titlecase }} </span> -->
+
+        <mat-icon aria-hidden="false" aria-label="welcome-user" class="welcome-user-icon">account_circle</mat-icon>
+    </div>
+</mat-toolbar>
