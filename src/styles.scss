@@ -479,3 +479,6 @@ button {
  .mat-drawer-backdrop.mat-drawer-shown {
     background-color: rgba(0, 0, 0, 0) !important;
 }
+.mat-drawer-content{
+    overflow: none !important;
+}

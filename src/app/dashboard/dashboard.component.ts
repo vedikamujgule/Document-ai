@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit {
     start: new FormControl(),
     end: new FormControl(new Date())
   });
-  columnsToDisplay: any = ['InvoiceId', 'VendorName','ApplicantEmail','InvoiceDate', 'Status'];
+  columnsToDisplay: any = ['InvoiceId', 'VendorName','InvoiceDate','Status', 'Source', 'updatedBy', 'assignee'];
   advancedSearchForm: any;
   startCalDate: any;
   endCalDate: any;
@@ -152,12 +152,12 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFormDetails(InvoiceId, type: string) {
-    sessionStorage.removeItem(APPCONFIG.fileStorageId);
+    // sessionStorage.removeItem(APPCONFIG.fileStorageId);
     this.dataService.changeMessage(InvoiceId);
     this.loader.start();
     // debugger;
-    if(type.toLowerCase() == 'cognito forms'){
-      this.router.navigate(['/cg-detail']);
+    if(type.toLowerCase() == 'email'){
+      this.router.navigate(['/email-forms']);
     }
     else if(type.toUpperCase() == 'WEB_FORM'){
       this.router.navigate(['/ns-form-detail']);

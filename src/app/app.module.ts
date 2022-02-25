@@ -165,7 +165,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   providers: [AuthService, AuthGuard,
-    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},{provide: MatDialogRef, useValue:{}},
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}},{provide: MatDialogRef, useValue:{}, },
     CgDetailComponent,
 
   ],

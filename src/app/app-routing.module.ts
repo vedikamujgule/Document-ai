@@ -12,12 +12,12 @@ import { UserRole } from './shared/auth.roles';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
-
-
   {
     path: 'dashboard',
     component: DashboardComponent
-
+  },{
+    path: 'email-forms',
+    component: FormDetailComponent
   },
   { path: '**', redirectTo: '' }
 ];

@@ -2,10 +2,10 @@
     <mat-toolbar class="custom-mat-toolbar-heading">
         <span class="custom-title">Dashboard</span>
         <span class="example-spacer"></span>
-        <small class="d-flex align-items-center timer">
+        <!-- <small class="d-flex align-items-center timer">
             <mat-icon>today</mat-icon>
             Feb 25, 2022
-        </small>
+        </small> -->
     </mat-toolbar>
     <section class="cards-sections">
         <mat-card class="example-card p-0 mat-elevation-z6 custom-mat-card-table custom-theme-table">
@@ -56,10 +56,18 @@
             </mat-toolbar>
             <div class="custom-mat-table mat-custom-table">
                 <table mat-table [dataSource]="dataSource" class="table m-0">
-        
+                    <ng-container matColumnDef="select">
+                        <th style="width: 100px;" mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
                     <ng-container matColumnDef="InvoiceId">
                         <th mat-header-cell *matHeaderCellDef> Document No. </th>
-                        <td mat-cell *matCellDef="let element" >
+                        <td mat-cell *matCellDef="let element" (click)="fetchFormDetails(element.InvoiceId.Label, element.Source.Label)">
                             <a href="javascript:void(0)" class="d-flex align-items-center text-decoration-none">
                                 <mat-icon class="mr-1">info</mat-icon> {{element.InvoiceId.Label}}
                             </a>
@@ -70,34 +78,60 @@
                         <td mat-cell *matCellDef="let element" >
  
                             <span>  {{element.VendorName.Label}}</span>
-                            <!-- <span>  {{element.VendorName.Confidence}}</span> -->
                         </td>
                     </ng-container>
 
-                    <ng-container matColumnDef="ApplicantEmail">
+                    <!-- <ng-container matColumnDef="ApplicantEmail">
                         <th mat-header-cell *matHeaderCellDef> Applicant Email </th>
                         <td mat-cell *matCellDef="let element" >
                             <span>  {{element.ApplicantEmail.Label}}</span>
                         </td>
-                    </ng-container>
+                    </ng-container> -->
                     <ng-container matColumnDef="InvoiceDate">
-                        <th mat-header-cell *matHeaderCellDef> Invoice Date </th>
+                        <th mat-header-cell *matHeaderCellDef> Receieved Date </th>
                         <td mat-cell *matCellDef="let element" >
                             <span>  {{element.InvoiceDate.Label  | date:'mediumDate'}}</span>
                         </td>
                     </ng-container>
-                    <ng-container matColumnDef="Status">
-                        <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <!-- <ng-container matColumnDef="DayCount">
+                        <th mat-header-cell *matHeaderCellDef> Day Count</th>
                         <td mat-cell *matCellDef="let element" >
-                           <span>  {{element.Status.Label}}</span>
-                       
+                            <span>  {{element.DayCount.Label}} Days</span>
+                        </td>
+                    </ng-container> -->
+                    
+                    <ng-container matColumnDef="Source">
+                        <th mat-header-cell *matHeaderCellDef> Source </th>
+                        <td mat-cell *matCellDef="let element" >
+                            <span>  {{element.Source.Label}}</span>
+                        </td>
+                        <ng-container matColumnDef="Status">
+                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                            <td mat-cell *matCellDef="let element" [ngClass]="{'approved' : 'appr-status', 'onhold' : 'pend-status', 'pending' : 'pend-status', 'rejected' : 'rej-status'}[element.Status.Label]">
+                               {{element.Status.Label  | titlecase}}
+                           
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                         <ng-container matColumnDef="updatedBy">
+                        <th mat-header-cell *matHeaderCellDef>Updated By </th>
+                        <td mat-cell *matCellDef="let element"> {{element.updatedBy.Label != null ? element.updatedBy.Label : ''}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="assignee">
+                        <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                        <td mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="element.assignee">{{element.assignee.Label}}
+                     
+                            </ng-container>
+
                         </td>
                     </ng-container>
+
                     <tr mat-header-row *matHeaderRowDef="columnsToDisplay;"></tr>
                     <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
                 </table>
                 <div class="no-rec-found" *ngIf="noRecordsFound">No records found</div>
-                <!-- <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator> -->
+                <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
 
                 <div class="col-xl-12">
                     <app-paginator [page]="page" (nextPageEvent)="getNextPage()" (previousPageEvent)="getPreviousPage()" (firstPageEvent)="getFirstPage()" (lastPageEvent)="getLastPage()" (pageSizeEvent)="getPageInNewSize($event)">

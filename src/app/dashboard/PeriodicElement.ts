@@ -50,4 +50,20 @@ export interface PeriodicElement {
       Label: any,
       Confidence: any
     };
+    Source: {
+      Label: any,
+      Confidence: any
+    };
+    updatedBy: {
+      Label: any,
+      Confidence: any
+    };
+    assignee: {
+      Label: any,
+      Confidence: any
+    };
+    DayCount: {
+      Label: any,
+      Confidence: any
+    };
 }

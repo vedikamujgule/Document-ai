@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Component, OnInit, ViewChild, NgZone, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { APPCONFIG } from '../config/config';
@@ -20,6 +19,12 @@ import $ from 'jquery';
 import jQuery from 'jquery';
 import lightGallery from 'lightgallery';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatTableDataSource } from '@angular/material/table';
+import { PeriodicElement } from '../dashboard/PeriodicElement';
+import { Data1 } from '../docDtails';
+import { Console } from 'console';
+// import {invoice} from '../../assets/pdf/'
 
 @Component({
   selector: 'app-form-detail',
@@ -31,7 +36,7 @@ export class FormDetailComponent implements OnInit {
 
   addressTypes: string[] = ['Commercial', 'Residential'];
   uploadedDocs: string[];
-  primaryDocs: string[];
+  primaryDocs= {};
   primaryDoc: any;
   step = 0;
   apiUrl: String;
@@ -48,7 +53,22 @@ export class FormDetailComponent implements OnInit {
   emailContent: string;
   emailSubject:string;
   applicationStatus: any;
- 
+
+  pdfSrc = "../../assets/pdf/sample-invoice.pdf";
+  columnsToDisplay: any = [ 'VendorName','VendorAddress'];
+  dataSource = new MatTableDataSource<PeriodicElement>([]);
+  parsedFormsDataSource = new MatTableDataSource<PeriodicElement>([]);
+  selection = new SelectionModel < PeriodicElement > (true, []);
+  connectionIds: any = [];
+  agents: any = [];
+  pageSize:number = 10;
+  FileName="INV-100"
+  details= [];
+  items= [];
+  items2=[];
+  docDetails: FormGroup;
+  itemsTable: FormGroup;
+
   constructor(private _ngZone: NgZone,
     private authService: AuthService,
     private commonService: CommonService,
@@ -63,16 +83,30 @@ export class FormDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-    this.loader.start();
-    this.isLoggedIn$ = this.authService.isLoggedIn;
-    this.apiUrl = APPCONFIG.appUrl;
-    this.accessToken = sessionStorage.getItem(APPCONFIG.token_key);
-    if(this.data.messageSource.getValue() != ''){
-      sessionStorage.setItem(APPCONFIG.fileStorageId, this.data.messageSource.getValue())
+    this.loader.stopAll();
+    // this.isLoggedIn$ = this.authService.isLoggedIn;
+    // this.apiUrl = APPCONFIG.appUrl;
+    // this.accessToken = sessionStorage.getItem(APPCONFIG.token_key);
+    // if(this.data.messageSource.getValue() != ''){
+    //   sessionStorage.setItem(APPCONFIG.fileStorageId, this.data.messageSource.getValue())
+    // }
+    this.pageLoad= true;
+          
+    this.primaryDocs={
+      fileType:'pdf',
+      fileURL:'src\assets\pdf\sample-invoice.pdf'
     }
+
     this.fileNo = sessionStorage.getItem(APPCONFIG.fileStorageId);
+    this.details.push(Data1[0]);
+    this.items.push(this.details[0].InvoiceItems.Item)
+    this.items2.push(this.details[0].InvoiceItems.Item2)
+
+
+    this.loader.stop();
     this.initApplicationForm();
     this.getApplicationDetails();
+    this.dataSource = new MatTableDataSource<PeriodicElement>(Data1);
   }
 
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
@@ -83,98 +117,44 @@ export class FormDetailComponent implements OnInit {
   }
 
   initApplicationForm(){
-    this.applicationForm = this.fb.group({
-      requesterName: [''],houseNoAndName: [''],street: [''],town: [''],
-      county: [''],postCode: [''],requesterContactName: [''],
-      requesterContact: [''],requesterEmailId: [''],siteHouseNoAndName: [''],siteStreet: [''],
-      siteTown: [''],siteCounty: [''],sitePostCode: [''],siteContactName: [''],
-      siteContact: [''], siteEmailId: [''],upgradeRequired: [''],existPropertyConnection: [''],
-      newPropertyConnection: [''], noOfConnections: [''], hourlyUsage: [''],
-      annualUsage: [''], propertyListed: [''], gradeType: [''], workAboveGroundFloor: [''],
-      streetHaveGas: [''], trenchDiggingRequired: [''], extraDiggingRequired: [''],
-      gasMeterRequired: [''], meterHeight: [''], meterWidth: [''], meterDepth: [''],
-      supplyUsage: [''], pressureAmount: [''], boosterComponentRequired: [''], compressorComponentRequired: [''],
-      heatingComponentRequired: [''], compressorType: [''], loadStartUpTime: [''], propertyType: [''],
+    this.docDetails = this.fb.group({
+      VendorName: [''],VendorAddress: [''],
+      BillingAddress: [''],BillingAddressRecipient: [''],
 
-      gasMeterSurfaceMounted: [''], gasMeterFreeStanding: [''], gasMeterMountedKiosk: [''], gasMeterSemiConcealed: [''],
-      gasMeterSurfaceMountedCount: [''], gasMeterFreeStandingCount: [''], gasMeterMountedKioskCount: [''], gasMeterSemiConcealedCount: ['']
+      CustomerName: [''],InvoiceId: [''],
+      InvoiceDate: [''],
+
+      Subtotal: [''], TotalTax: [''],
+
     });
+
+    this.itemsTable = this.fb.group({
+      Description: [''],Quantity: [''],
+      UnitPrice: [''],Amount: [''],
+    })
   }
 
   getApplicationDetails() {
-    
-    this.loader.start();
-    $('#lightgallery').unbind().removeData();
-    this.http.get(this.apiUrl + 'form/get/' + this.fileNo + '?access_token=' + this.accessToken).subscribe(
-      data => {
-        if (data['status'] == 200) {
-          let userDetails = data['obj'];
-          this.pageLoad= true;
-          
-          this.applicationForm.patchValue({
-            requesterName: userDetails.requesterName, houseNoAndName: userDetails.houseNoAndName,
-            street: userDetails.street, town: userDetails.town, county: userDetails.county,
-            postCode: userDetails.postCode, requesterContactName: userDetails.requesterContactName, 
-            requesterContact: userDetails.requesterContact,requesterEmailId: userDetails.requesterEmailId, 
-            siteHouseNoAndName: userDetails.siteHouseNoAndName, siteStreet: userDetails.siteStreet, 
-            siteTown: userDetails.siteTown, siteCounty: userDetails.siteCounty, sitePostCode: userDetails.sitePostCode, 
-            siteContactName: userDetails.siteContactName, siteContact: userDetails.siteContact, siteEmailId: userDetails.siteEmailId,
-            noOfConnections: userDetails.noOfConnections,
-            hourlyUsage: userDetails.hourlyUsage, annualUsage: userDetails.annualUsage,
-            meterHeight: this.replaceExtraChars(userDetails.meterHeight), meterWidth: this.replaceExtraChars(userDetails.meterWidth), meterDepth: this.replaceExtraChars(userDetails.meterDepth),
-            supplyUsage: userDetails.supplyUsage, pressureAmount: userDetails.pressureAmount, loadStartUpTime: userDetails.loadStartUpTime,
+    // this.loader.start()
+          this.docDetails.patchValue({
+            VendorName: this.details[0].VendorName.Label,
+            VendorAddress: this.details[0].VendorAddress.Label,
+            BillingAddress: this.details[0].BillingAddress.Label,
+            BillingAddressRecipient: this.details[0].BillingAddressRecipient.Label,
 
-            // edit after form update
-            upgradeRequired: userDetails.upgradeRequired,
-            existPropertyConnection: userDetails.existPropertyConnection,
-            newPropertyConnection: userDetails.newPropertyConnection,
-            propertyListed: String(userDetails.propertyListed),
-            workAboveGroundFloor: String(userDetails.workAboveGroundFloor),
-            streetHaveGas: String(userDetails.streetHaveGas),
-            gradeType: String(userDetails.gradeType),
-            propertyType: String(userDetails.propertyType),
+            CustomerName: this.details[0].CustomerName.Label,
+            InvoiceId: this.details[0].InvoiceId.Label,
+            InvoiceDate: this.details[0].InvoiceDate.Label,
 
-            trenchDiggingRequired:String(userDetails.trenchDiggingRequired),
-            extraDiggingRequired:String(userDetails.extraDiggingRequired),
-            gasMeterRequired:String(userDetails.gasMeterRequired),
-            compressorType:String(userDetails.compressorType),
-
-            boosterComponentRequired: userDetails.boosterComponentRequired,
-            compressorComponentRequired: userDetails.compressorComponentRequired,
-            heatingComponentRequired: userDetails.heatingComponentRequired,
-
-            gasMeterSurfaceMounted: userDetails.gasMeterSurfaceMounted,
-            gasMeterFreeStanding: userDetails.gasMeterFreeStanding,
-            gasMeterMountedKiosk: userDetails.gasMeterMountedKiosk,
-            gasMeterSemiConcealed: userDetails.gasMeterSemiConcealed,
-            gasMeterSurfaceMountedCount: userDetails.gasMeterSurfaceMountedCount, 
-            gasMeterFreeStandingCount: userDetails.gasMeterFreeStandingCount,
-            gasMeterMountedKioskCount: userDetails.gasMeterMountedKioskCount, 
-            gasMeterSemiConcealedCount: userDetails.gasMeterSemiConcealedCount
+            Subtotal: this.details[0].Subtotal.Label,
+            TotalTax: this.details[0].TotalTax.Label,
           });
-          this.uploadedDocs = userDetails.uploadedDocs;
-          this.primaryDocs = userDetails.primaryDocs;
-          this.fieldPredictObj = userDetails.fieldPrediction;
-          this.emailContent = userDetails.emailContent;
-          this.emailSubject = userDetails.emailSubject;
-          this.applicationStatus =  userDetails.applicationStatus;
-          this.loader.stop();
-          setTimeout(function () {
-            lightGallery(document.getElementById('lightgallery'));
-          }, 100);    
-        } else {
-          this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
-        }
-        this.loader.stop();
-      },
-      error => {
-        console.debug('error :- ' + error);
-        if(error['status'] == 403){
-          this.alertService.openDialogBox();
-        }  
-        this.loader.stop();
-      }
-    );
+          this.itemsTable.patchValue({
+            Description: this.items[0].Description.Label,
+            Quantity:  this.items[0].Quantity.Label,
+            UnitPrice:  this.items[0].UnitPrice.Label,
+            Amount:  this.items[0].Amount.Label,
+          })
   }
 
   replaceExtraChars(val){
