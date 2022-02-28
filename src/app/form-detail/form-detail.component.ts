@@ -83,7 +83,7 @@ export class FormDetailComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-    this.loader.stopAll();
+    this.loader.start();
     // this.isLoggedIn$ = this.authService.isLoggedIn;
     // this.apiUrl = APPCONFIG.appUrl;
     // this.accessToken = sessionStorage.getItem(APPCONFIG.token_key);
@@ -97,15 +97,14 @@ export class FormDetailComponent implements OnInit {
       fileURL:'src\assets\pdf\sample-invoice.pdf'
     }
 
-    this.fileNo = sessionStorage.getItem(APPCONFIG.fileStorageId);
     this.details.push(Data1[0]);
     this.items.push(this.details[0].InvoiceItems.Item)
     this.items2.push(this.details[0].InvoiceItems.Item2)
-
-
-    this.loader.stop();
     this.initApplicationForm();
     this.getApplicationDetails();
+
+    this.loader.stop();
+ 
     this.dataSource = new MatTableDataSource<PeriodicElement>(Data1);
   }
 
