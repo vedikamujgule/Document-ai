@@ -196,6 +196,7 @@
                     </div>
                 </div>
             </form>
+          
         </mat-card-content>
         <mat-card-actions>
             <button class="right-5 primary-text" type="button" mat-stroked-button color="primary"
@@ -210,4 +211,24 @@
                 (click)="updateStatus(2)">Approve</button>
         </mat-card-actions>
     </mat-card>
+    
+  <form [formGroup]="dynamicForm" style="background-color: white;" >
+    <!-- <span>ashv</span> -->
+    <ng-container *ngFor="let field of dynamicFields" style="color: rgb(0, 0, 0);">
+        {{field.label}}
+        <input type="field.type" formControlName="{{field.label}}"/>
+      <ng-container *ngFor="let validation of field.validations">
+        <span *ngIf="dynamicForm.controls.Username.hasError(validation.validator)">
+            <span >error</span>
+          <!-- <p *ngIf="dynamicForm.controls['{{field.label}}']?.hasError(validation.validator).validation.name">
+            {{validation.message}}
+          </p> -->
+        </span>
+    </ng-container>
+    <br>
+</ng-container>
+  <br>
+  <button type="submit" [disabled]="!dynamicForm.valid" (click)="getData()"> Submit</button>
+</form>
 </section>
+   
