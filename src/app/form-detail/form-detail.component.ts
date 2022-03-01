@@ -24,16 +24,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PeriodicElement } from '../dashboard/PeriodicElement';
 import { Data1 } from '../docDtails';
 import { Console } from 'console';
-// import {invoice} from '../../assets/pdf/'
-
+import {fields} from './../data'
 @Component({
   selector: 'app-form-detail',
   templateUrl: './form-detail.component.html',
   styleUrls: ['./form-detail.component.scss']
 })
 export class FormDetailComponent implements OnInit {
-
-
+  dynamicFields = fields;
   addressTypes: string[] = ['Commercial', 'Residential'];
   uploadedDocs: string[];
   primaryDocs= {};
@@ -53,7 +51,7 @@ export class FormDetailComponent implements OnInit {
   emailContent: string;
   emailSubject:string;
   applicationStatus: any;
-
+  dynamicForm: FormGroup;
   pdfSrc = "../../assets/pdf/sample-invoice.pdf";
   columnsToDisplay: any = [ 'VendorName','VendorAddress'];
   dataSource = new MatTableDataSource<PeriodicElement>([]);
@@ -80,7 +78,31 @@ export class FormDetailComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private sanitizer:DomSanitizer,
-    ) { }
+    ) {
+
+      const controls = {};
+      this.dynamicFields.forEach(res => {
+        const validationsArray = [];
+        res.validations.forEach(val => {
+          if (val.name === 'required') {
+            validationsArray.push(
+              Validators.required
+            );
+          }
+          if (val.name === 'pattern') {
+            validationsArray.push(
+              Validators.pattern(val.validator)
+            );
+          }
+        });
+        controls[res.label] = new FormControl('', validationsArray);
+      });
+      this.dynamicForm = new FormGroup(
+        controls
+      );
+      console.log(this.dynamicForm.controls)
+
+     }
 
     ngOnInit(): void {
     this.loader.start();
@@ -91,12 +113,11 @@ export class FormDetailComponent implements OnInit {
     //   sessionStorage.setItem(APPCONFIG.fileStorageId, this.data.messageSource.getValue())
     // }
     this.pageLoad= true;
-          
+       
     this.primaryDocs={
       fileType:'pdf',
       fileURL:'src\assets\pdf\sample-invoice.pdf'
     }
-
     this.details.push(Data1[0]);
     this.items.push(this.details[0].InvoiceItems.Item)
     this.items2.push(this.details[0].InvoiceItems.Item2)
@@ -119,12 +140,9 @@ export class FormDetailComponent implements OnInit {
     this.docDetails = this.fb.group({
       VendorName: [''],VendorAddress: [''],
       BillingAddress: [''],BillingAddressRecipient: [''],
-
       CustomerName: [''],InvoiceId: [''],
       InvoiceDate: [''],
-
       Subtotal: [''], TotalTax: [''],
-
     });
 
     this.itemsTable = this.fb.group({
@@ -185,8 +203,6 @@ export class FormDetailComponent implements OnInit {
   }
 
   updateStatus(status:number) {
-
-
     const dialogRef = this.dialog.open(StatusDialogComponent, {
       data: {actionReason: this.actionReason}
     });
@@ -322,5 +338,8 @@ export class FormDetailComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(fileUrl);
   }
 
+  getData(){
+   console.log(this.dynamicForm.valid, this.dynamicForm.value)
+  }
 }
 
