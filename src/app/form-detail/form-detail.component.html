@@ -1,6 +1,6 @@
 <mat-toolbar class="custom-mat-toolbar custom-mat-toolbar-heading form-details-toolbar d-flex">
-    <span class="custom-title">Document No -{{ FileName }}</span>
-    <div class="form-detail-actions ">
+    <span class="custom-title">Document No -{{ documentID }}    </span>
+           <div class="form-detail-actions ">
         <button class="view-btn white-bg action-btn margin-right-5 primary-text" aria-label="view history"
             mat-stroked-button color="primary" (click)="fetchHistory()">
             <mat-icon>history</mat-icon>
@@ -43,21 +43,21 @@
                                 <div class="tabs mt-2">
                                     <span>Vendor Name</span>
                                     <div style="margin-left: 10em;">
-                                        <input type="text" matInput formControlName="VendorName"
+                                        <input type="text" matInput formControlName="Vendor_Name"
                                             placeholder="Vendor Name">
                                     </div>
                                     <mark
-                                        [ngClass]="{'green':data.VendorName.Confidence*100>75,'red':data.VendorName.Confidence*100<75}">{{data.VendorName.Confidence*100
+                                        [ngClass]="{'green':data.Vendor_Name.Confidence*100>75,'red':data.Vendor_Name.Confidence*100<75}">{{data.Vendor_Name.Confidence*100
                                         | number : '1.2-2'}}%</mark>
 
                                 </div>
                                 <div class="d-flex tabs mt-2">
                                     <span>Vendor Address</span>
                                     <div style="margin-left: 9em;">
-                                        <input type="text" matInput formControlName="VendorAddress"
+                                        <input type="text" matInput formControlName="Vendor_Address"
                                         placeholder="Vendor Address">
                                         <mark
-                                            [ngClass]="{'green':data.VendorAddress.Confidence*100>75,'red':data.VendorAddress.Confidence*100<75}">{{data.VendorAddress.Confidence*100
+                                            [ngClass]="{'green':data.Vendor_Address.Confidence*100>75,'red':data.Vendor_Address.Confidence*100<75}">{{data.Vendor_Address.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -65,10 +65,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Billing Address Recepient</span>
                                     <div style="margin-left: 5em;">
-                                        <input type="text" matInput formControlName="BillingAddressRecipient"
+                                        <input type="text" matInput formControlName="Billing_address_Recipient"
                                         placeholder="Billing Address Recipient">
                                         <mark
-                                            [ngClass]="{'green':data.BillingAddressRecipient.Confidence*100>75,'red':data.BillingAddressRecipient.Confidence*100<75}">{{data.BillingAddressRecipient.Confidence*100
+                                            [ngClass]="{'green':data.Billing_address_Recipient.Confidence*100>75,'red':data.Billing_address_Recipient.Confidence*100<75}">{{data.Billing_address_Recipient.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -76,10 +76,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Billing Address</span>
                                     <div style="margin-left: 9.5em;">
-                                        <input type="text" matInput formControlName="BillingAddress"
+                                        <input type="text" matInput formControlName="Billing_Address"
                                         placeholder="Billing Address">
                                         <mark
-                                            [ngClass]="{'green':data.BillingAddress.Confidence*100>75,'red':data.BillingAddress.Confidence*100<75}">{{data.BillingAddress.Confidence*100
+                                            [ngClass]="{'green':data.Billing_Address.Confidence*100>75,'red':data.Billing_Address.Confidence*100<75}">{{data.Billing_Address.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -90,10 +90,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Invoice Id</span>
                                     <div style="margin-left: 11em;">
-                                        <input type="text" matInput formControlName="InvoiceId"
+                                        <input type="text" matInput formControlName="Invoice_Id"
                                         placeholder="Invoice Id">
                                         <mark
-                                            [ngClass]="{'green':data.InvoiceId.Confidence*100>75,'red':data.InvoiceId.Confidence*100<75}">{{data.InvoiceId.Confidence*100
+                                            [ngClass]="{'green':data.Invoice_Id.Confidence*100>75,'red':data.Invoice_Id.Confidence*100<75}">{{data.Invoice_Id.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -102,10 +102,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Customer Name</span>
                                     <div style="margin-left: 8em;">
-                                        <input type="text" matInput formControlName="CustomerName"
+                                        <input type="text" matInput formControlName="Customer_Name"
                                         placeholder="Customer Name">
                                         <mark
-                                            [ngClass]="{'green':data.CustomerName.Confidence*100>75,'red':data.CustomerName.Confidence*100<75}">{{data.CustomerName.Confidence*100
+                                            [ngClass]="{'green':data.Customer_Name.Confidence*100>75,'red':data.Customer_Name.Confidence*100<75}">{{data.Customer_Name.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -113,10 +113,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Invoice Date</span>
                                     <div style="margin-left: 10em;">
-                                        <input type="text" matInput formControlName="InvoiceDate"
+                                        <input type="text" matInput formControlName="Invoice_Date"
                                         placeholder="Invoice Date">
                                         <mark
-                                            [ngClass]="{'green':data.InvoiceDate.Confidence*100>75,'red':data.InvoiceDate.Confidence*100<75}">{{data.InvoiceDate.Confidence*100
+                                            [ngClass]="{'green':data.Invoice_Date.Confidence*100>75,'red':data.Invoice_Date.Confidence*100<75}">{{data.Invoice_Date.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
 
@@ -183,10 +183,10 @@
                                 <div class="d-flex tabs mt-2">
                                     <span>Total Tax</span>
                                     <div style="margin-left: 11em;">
-                                        <input type="text" matInput formControlName="TotalTax"
+                                        <input type="text" matInput formControlName="Total_Tax"
                                         placeholder="Total Tax">
                                         <mark
-                                            [ngClass]="{'green':data.TotalTax.Confidence*100>75,'red':data.TotalTax.Confidence*100<75}">{{data.TotalTax.Confidence*100
+                                            [ngClass]="{'green':data.Total_Tax.Confidence*100>75,'red':data.Total_Tax.Confidence*100<75}">{{data.Total_Tax.Confidence*100
                                             | number : '1.2-2'}}%</mark>
                                     </div>
                                 </div>
@@ -211,24 +211,23 @@
                 (click)="updateStatus(2)">Approve</button>
         </mat-card-actions>
     </mat-card>
-    
+<!--     
   <form [formGroup]="dynamicForm" style="background-color: white;" >
-    <!-- <span>ashv</span> -->
     <ng-container *ngFor="let field of dynamicFields" style="color: rgb(0, 0, 0);">
         {{field.label}}
         <input type="field.type" formControlName="{{field.label}}"/>
       <ng-container *ngFor="let validation of field.validations">
         <span *ngIf="dynamicForm.controls.Username.hasError(validation.validator)">
             <span >error</span>
-          <!-- <p *ngIf="dynamicForm.controls['{{field.label}}']?.hasError(validation.validator).validation.name">
+          <p *ngIf="dynamicForm.controls['{{field.label}}']?.hasError(validation.validator).validation.name">
             {{validation.message}}
-          </p> -->
+          </p>
         </span>
     </ng-container>
     <br>
 </ng-container>
   <br>
   <button type="submit" [disabled]="!dynamicForm.valid" (click)="getData()"> Submit</button>
-</form>
+</form> -->
 </section>
    

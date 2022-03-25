@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Component, OnInit, ViewChild, NgZone, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { APPCONFIG } from '../config/config';
 import { CommonService } from '../shared/common.service';
@@ -21,7 +21,7 @@ import lightGallery from 'lightgallery';
 import { DomSanitizer } from '@angular/platform-browser';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
-import { PeriodicElement } from '../dashboard/PeriodicElement';
+import { documentDetailsEle, PeriodicElement } from '../dashboard/PeriodicElement';
 import { Data1 } from '../docDtails';
 import { Console } from 'console';
 import {fields} from './../data'
@@ -52,9 +52,10 @@ export class FormDetailComponent implements OnInit {
   emailSubject:string;
   applicationStatus: any;
   dynamicForm: FormGroup;
-  pdfSrc = "../../assets/pdf/sample-invoice.pdf";
+  pdfSrc = "../../assets/pdf/fancy-sports.pdf";
   columnsToDisplay: any = [ 'VendorName','VendorAddress'];
   dataSource = new MatTableDataSource<PeriodicElement>([]);
+  docDetailsSource = new MatTableDataSource<documentDetailsEle>([]);
   parsedFormsDataSource = new MatTableDataSource<PeriodicElement>([]);
   selection = new SelectionModel < PeriodicElement > (true, []);
   connectionIds: any = [];
@@ -66,6 +67,8 @@ export class FormDetailComponent implements OnInit {
   items2=[];
   docDetails: FormGroup;
   itemsTable: FormGroup;
+  invoiceDetails: any;
+  documentID: any;
 
   constructor(private _ngZone: NgZone,
     private authService: AuthService,
@@ -78,55 +81,41 @@ export class FormDetailComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private sanitizer:DomSanitizer,
+    private route: ActivatedRoute
     ) {
-
-      const controls = {};
-      this.dynamicFields.forEach(res => {
-        const validationsArray = [];
-        res.validations.forEach(val => {
-          if (val.name === 'required') {
-            validationsArray.push(
-              Validators.required
-            );
-          }
-          if (val.name === 'pattern') {
-            validationsArray.push(
-              Validators.pattern(val.validator)
-            );
-          }
-        });
-        controls[res.label] = new FormControl('', validationsArray);
-      });
-      this.dynamicForm = new FormGroup(
-        controls
-      );
-      console.log(this.dynamicForm.controls)
-
      }
 
     ngOnInit(): void {
     this.loader.start();
+    this.initApplicationForm();
     // this.isLoggedIn$ = this.authService.isLoggedIn;
     // this.apiUrl = APPCONFIG.appUrl;
     // this.accessToken = sessionStorage.getItem(APPCONFIG.token_key);
     // if(this.data.messageSource.getValue() != ''){
     //   sessionStorage.setItem(APPCONFIG.fileStorageId, this.data.messageSource.getValue())
     // }
+    this.route.params.subscribe(params => {
+      this.getDetailsFromAPI(params.id);
+      this.documentID = params.id;
+      // this.details.push(Data1[0]);
+      // this.items.push(this.details[0].InvoiceItems.Item)
+      // this.items2.push(this.details[0].InvoiceItems.Item2)
+      // this.initApplicationForm();
+      // this.getApplicationDetails();
+    })
+
+    
     this.pageLoad= true;
        
     this.primaryDocs={
       fileType:'pdf',
       fileURL:'src\assets\pdf\sample-invoice.pdf'
     }
-    this.details.push(Data1[0]);
-    this.items.push(this.details[0].InvoiceItems.Item)
-    this.items2.push(this.details[0].InvoiceItems.Item2)
-    this.initApplicationForm();
-    this.getApplicationDetails();
-
-    this.loader.stop();
  
-    this.dataSource = new MatTableDataSource<PeriodicElement>(Data1);
+    this.loader.stop();
+    // console.log(Data1)
+    // this.dataSource = new MatTableDataSource<PeriodicElement>(Data1);
+
   }
 
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
@@ -138,11 +127,11 @@ export class FormDetailComponent implements OnInit {
 
   initApplicationForm(){
     this.docDetails = this.fb.group({
-      VendorName: [''],VendorAddress: [''],
-      BillingAddress: [''],BillingAddressRecipient: [''],
-      CustomerName: [''],InvoiceId: [''],
-      InvoiceDate: [''],
-      Subtotal: [''], TotalTax: [''],
+      Vendor_Name: [''],Vendor_Address: [''],
+      Billing_Address: [''],Billing_address_Recipient: [''],
+      Customer_Name: [''],Invoice_Id: [''],
+      Invoice_Date: [''],
+      Subtotal: [''], Total_Tax: [''],
     });
 
     this.itemsTable = this.fb.group({
@@ -150,21 +139,29 @@ export class FormDetailComponent implements OnInit {
       UnitPrice: [''],Amount: [''],
     })
   }
-
+  // Billing_Address: { Label: String, Confidence: Number }
+  // Billing_address_Recipient: { Label: String, Confidence: Number }
+  // Customer_Name: { Label: String, Confidence: Number }
+  // Invoice_Date: { Label: String, Confidence: Number }
+  // Invoice_Id: { Label: String, Confidence: Number }
+  // Invoice_items: {}
+  // Subtotal: { Label: Number, Confidence: Number }
+  // Total_Tax: { Label: Number, Confidence: Number }
+  // Vendor_Name: { Label: String, Con
   getApplicationDetails() {
     // this.loader.start()
           this.docDetails.patchValue({
-            VendorName: this.details[0].VendorName.Label,
-            VendorAddress: this.details[0].VendorAddress.Label,
-            BillingAddress: this.details[0].BillingAddress.Label,
-            BillingAddressRecipient: this.details[0].BillingAddressRecipient.Label,
+            Vendor_Name: this.details[0].Vendor_Name.Label,
+            Vendor_Address: this.details[0].Vendor_Address.Label,
+            Billing_Address: this.details[0].Billing_Address.Label,
+            Billing_address_Recipient: this.details[0].Billing_address_Recipient.Label,
 
-            CustomerName: this.details[0].CustomerName.Label,
-            InvoiceId: this.details[0].InvoiceId.Label,
-            InvoiceDate: this.details[0].InvoiceDate.Label,
+            Customer_Name: this.details[0].Customer_Name.Label,
+            Invoice_Id: this.details[0].Invoice_Id.Label,
+            Invoice_Date: this.details[0].Invoice_Date.Label,
 
             Subtotal: this.details[0].Subtotal.Label,
-            TotalTax: this.details[0].TotalTax.Label,
+            Total_Tax: this.details[0].Total_Tax.Label,
           });
           this.itemsTable.patchValue({
             Description: this.items[0].Description.Label,
@@ -341,5 +338,34 @@ export class FormDetailComponent implements OnInit {
   getData(){
    console.log(this.dynamicForm.valid, this.dynamicForm.value)
   }
+
+  getDetailsFromAPI(documentID){
+    try {
+      this.loader.start();
+      this.http.get('https://msdocs-python-webapp-quickstart-xyztctest.azurewebsites.net/hello_azure/backendurl/?Invoice_Id='+ documentID).subscribe((data: any) => {
+          this.invoiceDetails = data;
+          this.loader.stop();
+          console.log("doc data",  this.invoiceDetails)
+          this.details.push( this.invoiceDetails?.Documents[0]);
+          // console.log('heer',this.details[0]);
+          this.items.push(this.details[0].Invoice_items.Item1)
+          // this.items.push(this.details[0].Invoice_items.Item2)
+          // this.items.push(this.details[0].Invoice_items.Item3)
+          console.log('data', this.items)
+          this.getApplicationDetails();
+      
+      },
+        error => {
+          this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
+          this.loader.stop();
+        })
+    } catch (error) {
+      console.log('exception', error)
+      this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
+
+    }
+
+  }
+
 }
 

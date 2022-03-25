@@ -16,8 +16,9 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent
   },{
-    path: 'email-forms',
-    component: FormDetailComponent
+    path: 'forms/:id',
+    component: FormDetailComponent,
+    
   },
   { path: '**', redirectTo: '' }
 ];

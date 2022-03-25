@@ -13,7 +13,7 @@ import { APPCONFIG } from '../config/config';
 import { CommonService } from '../shared/common.service';
 import { StaticData } from '../shared/static-data';
 import { AuthService } from './../auth/auth.service';
-import { PeriodicElement } from './PeriodicElement';
+import {  dashboardDataEle, PeriodicElement } from './PeriodicElement';
 import $ from 'jquery';
 import { AlertService } from '../alert-dialog/alert.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -31,12 +31,14 @@ import { Data } from '../docDtails';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'InvoiceId', 'applicantEmail', 'applicantName', 'phoneNo', 'submitDate', 'duration', 'fileSource', 'updatedBy', 'status', 'assignedTo'];
+  // displayedColumns: string[] = ['select', 'InvoiceId', 'applicantEmail', 'applicantName', 'phoneNo', 'submitDate', 'duration', 'fileSource', 'updatedBy', 'status', 'assignedTo'];
+  displayedColumns: string[] = [ 'Invoice_Id', 'Received_Date', 'Source', 'Status','Vendor_Name'];
   fileRecords: any = [];
   allParsedForms: any = [];
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   parsedFormsDataSource = new MatTableDataSource<PeriodicElement>([]);
   selection = new SelectionModel < PeriodicElement > (true, []);
+  dashboardDataSource = new MatTableDataSource<dashboardDataEle>([]);
   connectionIds: any = [];
   agents: any = [];
   pageSize:number = 10;
@@ -78,6 +80,7 @@ export class DashboardComponent implements OnInit {
   filterApplied: boolean = false;
   isAdminOrManager: boolean | false;
   dialogRef: any;
+  dashboardData: any;
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -112,16 +115,14 @@ export class DashboardComponent implements OnInit {
     if ((role == 'admin') || (role == 'manager')) {
       this.isAdminOrManager = true;
     }
-    // this.getDashBoardData();
     this.fileRecords = Data;
     this.pageData = Data;
     this.dataSource = new MatTableDataSource<PeriodicElement>(Data);
     console.log(this.fileRecords);
-    if (this.fileRecords == null || this.fileRecords.length == 0) this.noRecordsFound = true;
-    else this.noRecordsFound = false;
+    
     this.filterApplied = true;
     this.loader.stop();
-    this.dataSource = new MatTableDataSource<PeriodicElement>(Data);
+    this.getDashboardData();
     // this.initializeDropdownSettings();
     // this.statusType = StaticData.statusTypes;
     // this.getUserColumnMaping();
@@ -155,15 +156,17 @@ export class DashboardComponent implements OnInit {
     // sessionStorage.removeItem(APPCONFIG.fileStorageId);
     this.dataService.changeMessage(InvoiceId);
     this.loader.start();
-    // debugger;
-    if(type.toLowerCase() == 'email'){
-      this.router.navigate(['/email-forms']);
-    }
-    else if(type.toUpperCase() == 'WEB_FORM'){
-      this.router.navigate(['/ns-form-detail']);
-    }else{
-      this.router.navigate(['/form-detail']);
-    }
+    this.router.navigate([`/forms/${InvoiceId}`]);
+    
+    // if(type.toLowerCase() == 'email'){
+    //   this.router.navigate(['/email-forms']);
+    // }
+    // else if(type.toUpperCase() == 'WEB_FORM'){
+    //   this.router.navigate(['/ns-form-detail']);
+    // }else{
+    //   this.router.navigateByUrl('/dashboard/form-detail/' );
+
+    // }
   }
 
   fetchAllAgents() {
@@ -551,6 +554,30 @@ export class DashboardComponent implements OnInit {
     this.page.pageable = this.paginationService.getLastPage(this.page, this.page.totalPages);
     if (this.filterApplied) this.getDashBoardData();
     else this.getDashBoardData();
+  }
+
+  getDashboardData(){
+    try {
+      this.loader.start();
+      this.http.get('https://msdocs-python-webapp-quickstart-xyztctest.azurewebsites.net/hello_azure/backendlist/').subscribe((data: any) => {
+        this.dashboardData = data;
+        if (this.dashboardData?.Documents == null || this.dashboardData?.Documents.length == 0) this.noRecordsFound = true;
+        else this.noRecordsFound = false;
+        this.dashboardDataSource = new MatTableDataSource<dashboardDataEle>(this.dashboardData.Documents);
+        console.log('api data',this.dashboardData.Documents,this.dashboardDataSource)
+          this.loader.stop();
+      },
+        error => {
+          this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
+          this.loader.stop();
+        })
+
+    } catch (error) {
+      console.log('exception', error)
+      this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
+
+    }
+
   }
   // page = 0;
   // totalRecords = 4;

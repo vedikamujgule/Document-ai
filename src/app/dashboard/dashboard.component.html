@@ -55,7 +55,7 @@
                 </div>
             </mat-toolbar>
             <div class="custom-mat-table mat-custom-table">
-                <table mat-table [dataSource]="dataSource" class="table m-0">
+                <!-- <table mat-table [dataSource]="dataSource" class="table m-0">
                     <ng-container matColumnDef="select">
                         <th style="width: 100px;" mat-header-cell *matHeaderCellDef>
                             <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
@@ -80,26 +80,12 @@
                             <span>  {{element.VendorName.Label}}</span>
                         </td>
                     </ng-container>
-
-                    <!-- <ng-container matColumnDef="ApplicantEmail">
-                        <th mat-header-cell *matHeaderCellDef> Applicant Email </th>
-                        <td mat-cell *matCellDef="let element" >
-                            <span>  {{element.ApplicantEmail.Label}}</span>
-                        </td>
-                    </ng-container> -->
                     <ng-container matColumnDef="InvoiceDate">
                         <th mat-header-cell *matHeaderCellDef> Receieved Date </th>
                         <td mat-cell *matCellDef="let element" >
                             <span>  {{element.InvoiceDate.Label  | date:'mediumDate'}}</span>
                         </td>
                     </ng-container>
-                    <!-- <ng-container matColumnDef="DayCount">
-                        <th mat-header-cell *matHeaderCellDef> Day Count</th>
-                        <td mat-cell *matCellDef="let element" >
-                            <span>  {{element.DayCount.Label}} Days</span>
-                        </td>
-                    </ng-container> -->
-                    
                     <ng-container matColumnDef="Source">
                         <th mat-header-cell *matHeaderCellDef> Source </th>
                         <td mat-cell *matCellDef="let element" >
@@ -120,15 +106,53 @@
                     <ng-container matColumnDef="assignee">
                         <th mat-header-cell *matHeaderCellDef> Assignee </th>
                         <td mat-cell *matCellDef="let element">
-                            <ng-container *ngIf="element.assignee">{{element.assignee.Label}}
-                     
+                            <ng-container *ngIf="element.assignee">{{element.assignee.Label}}  
                             </ng-container>
-
                         </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="columnsToDisplay;"></tr>
                     <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+                </table> -->
+
+                <table mat-table [dataSource]="dashboardDataSource" class="table m-0">
+                    <ng-container matColumnDef="Invoice_Id">
+                        <th mat-header-cell *matHeaderCellDef> Document No. </th>
+                        <td mat-cell *matCellDef="let element" (click)="fetchFormDetails(element.Invoice_Id, element.Source)">
+                            <a href="javascript:void(0)" class="d-flex align-items-center text-decoration-none">
+                                <mat-icon class="mr-1">info</mat-icon> {{element.Invoice_Id}}
+                            </a>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Vendor_Name">
+                        <th mat-header-cell *matHeaderCellDef> Vendor Name </th>
+                        <td mat-cell *matCellDef="let element" >
+ 
+                            <span>  {{element.Vendor_Name}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Received_Date">
+                        <th mat-header-cell *matHeaderCellDef> Receieved Date </th>
+                        <td mat-cell *matCellDef="let element" >
+                            <span>  {{element.Received_Date  | date:'mediumDate'}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Source">
+                        <th mat-header-cell *matHeaderCellDef> Source </th>
+                        <td mat-cell *matCellDef="let element" >
+                            <span>  {{element.Source}}</span>
+                        </td>
+                    </ng-container>
+                        <ng-container matColumnDef="Status">
+                            <th mat-header-cell *matHeaderCellDef> Status </th>
+                            <td mat-cell *matCellDef="let element" [ngClass]="{'approved' : 'appr-status', 'onhold' : 'pend-status', 'Pending' : 'pend-status', 'rejected' : 'rej-status'}[element.Status]">
+                               {{element.Status}}
+                           
+                            </td>
+                        </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
                 <div class="no-rec-found" *ngIf="noRecordsFound">No records found</div>
                 <mat-paginator [pageSizeOptions]="[10, 20]" showFirstLastButtons></mat-paginator>
