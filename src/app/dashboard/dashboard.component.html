@@ -44,14 +44,14 @@
                         <mat-icon>filter_alt</mat-icon>
                         <span>Advance Filter</span>
                     </button>
-                    <button *ngIf="isAdminOrManager" mat-flat-button class="custom-btn primary-btn" [disabled]=" this.selection.selected.length == 0" color="primary" (click)="assignTask(this.selection.selected)">
+                   <!--  <button *ngIf="isAdminOrManager" mat-flat-button class="custom-btn primary-btn" [disabled]=" this.selection.selected.length == 0" color="primary" (click)="assignTask(this.selection.selected)">
                         <mat-icon>edit</mat-icon>
                         <span>Assign Task</span>
                     </button>
                     <button mat-flat-button class="custom-btn primary-btn" [disabled]=" this.selection.selected.length == 0" color="primary" data-toggle="modal" data-target="#archiveModalCenter">
                         <mat-icon>archive</mat-icon>
                         <span>Archive</span>
-                    </button>
+                    </button> -->
                 </div>
             </mat-toolbar>
             <div class="custom-mat-table mat-custom-table">
@@ -179,40 +179,14 @@
                                 <form [formGroup]="advancedSearchForm" class="row">
                                     <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
                                         <mat-form-field appearance="outline">
-                                            <mat-label>File No</mat-label>
-                                            <input matInput placeholder="Enter File No"  type="text">
+                                            <mat-label>Value</mat-label>
+                                            <input matInput placeholder="Enter Value"  formControlName='value' type="text">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
                                         <mat-form-field appearance="outline">
-                                            <mat-label>Applicant Name</mat-label>
-                                            <input matInput placeholder="Enter requester name" formControlName='advRequesterName' type="text">
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
-                                        <mat-form-field appearance="outline">
-                                            <mat-label>Received date</mat-label>
-                                            <mat-date-range-input [rangePicker]="bookingdate">
-                                                <input matStartDate formControlName='advStartDate' placeholder="Start date">
-                                                <input matEndDate formControlName='advEndDate' placeholder="End date">
-                                            </mat-date-range-input>
-                                            <mat-datepicker-toggle matSuffix [for]="bookingdate">
-                                            </mat-datepicker-toggle>
-                                            <mat-date-range-picker #bookingdate></mat-date-range-picker>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6">
-                                        <ng-multiselect-dropdown formControlName="advStatus" [placeholder]="'Application status'" [settings]="dropdownSettings" [data]="statusType">
-                                        </ng-multiselect-dropdown>
-                                    </div>
-                                    <div class="col-12 col-xl-6 col-md-6 col-sm-6 col-lg-6 margin-15">
-                                        <mat-form-field appearance="outline">
-                                            <mat-select placeholder="Assignee" formControlName="advAssignedTo">
-                                                <mat-option [value]="agentList.userId" *ngFor="let agentList of agents">
-                                                    {{agentList.fullName}}
-                                                </mat-option>
-                                            </mat-select>
+                                            <mat-label>Label Name</mat-label>
+                                            <input matInput placeholder="Enter Label" formControlName='label' type="text">
                                         </mat-form-field>
                                     </div>
                                 </form>
@@ -223,7 +197,7 @@
                                 <button type="button" mat-raised-button color="primary" data-dismiss="modal" (click)="getDashBoardData()">Search</button>
                             </div>
                         </mat-tab>
-                        <mat-tab>
+                        <!-- <mat-tab>
                             <ng-template mat-tab-label>
                                 <mat-icon class="material-icons-outlined mr-1">edit</mat-icon>
                                 Edit Table
@@ -234,7 +208,6 @@
                                     <mat-select-trigger>
                                         <mat-chip-list>
                                             <mat-chip *ngFor="let topping of columnFilterControl.value" [removable]="true" (removed)="onColumnRemoved(topping)">
-                                                <!-- {{ topping }} -->
                                                 <span *ngIf="topping == 'applicantEmail'">Applicant Email</span>
                                                 <span *ngIf="topping == 'requesterName'">Applicant Name</span>
                                                 <span *ngIf="topping == 'phoneNo'">Phone Number</span>
@@ -250,18 +223,9 @@
                                     </mat-select-trigger>
                                     <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelection()" class="custom-mat-checkbox all-check">Select All
                                     </mat-checkbox>
-                                    <!-- <mat-option *ngIf="data != 'status' && data != 'fileNo'" (click)="optionClick()" *ngFor="let data of columnsOption"
-                                        [value]="data">
-                                        {{data}}
-                                    </mat-option> -->
+                                
                                     <ng-container *ngFor="let data of columnsOption">
-                                        <!-- <mat-option *ngIf="data != 'status' && data != 'fileNo'" (click)="optionClick()"  [value]="data">{{data}}
-                                        </mat-option> -->
-
-
-                                        <!-- <mat-option *ngIf="data == 'select'" (click)="optionClick()" [value]="data">
-                                            Select
-                                        </mat-option> -->
+                              
                                         <mat-option *ngIf="data == 'applicantEmail'" (click)="optionClick()" [value]="data">Applicant Email
                                         </mat-option>
                                         <mat-option *ngIf="data == 'requesterName'" (click)="optionClick()" [value]="data">Applicant Name
@@ -287,7 +251,7 @@
                                     </ng-container>
                                 </mat-select>
                             </mat-form-field>
-                        </mat-tab>
+                        </mat-tab> -->
                     </mat-tab-group>
                 </div>
             </div>
