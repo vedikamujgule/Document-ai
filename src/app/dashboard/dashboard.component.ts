@@ -25,6 +25,7 @@ import { PaginateService } from '../paginate/service/paginate.service';
 import { AssignTaskComponent } from './assign-task/assign-task.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Data } from '../docDtails';
+import { fields } from '../data';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -97,12 +98,8 @@ export class DashboardComponent implements OnInit {
     private paginationService: PaginateService
   ) {
     this.advancedSearchForm = this.formBuilder.group({
-      advRequesterName: [''],
-      advInvoiceId: [''],
-      advStartDate: [''],
-      advEndDate: [''],
-      advStatus: [[]],
-      advAssignedTo: ['']
+      label: [''],
+      value: ['']
     });
   }
 
@@ -121,7 +118,6 @@ export class DashboardComponent implements OnInit {
     console.log(this.fileRecords);
     
     this.filterApplied = true;
-    this.loader.stop();
     this.getDashboardData();
     // this.initializeDropdownSettings();
     // this.statusType = StaticData.statusTypes;
@@ -423,29 +419,25 @@ export class DashboardComponent implements OnInit {
     this.commonService.downloadCSV(paged, "exported_records_" + Date.now(), fields)
 
   }
+
+ 
   
   getDashBoardData() {
     this.loader.start();
-    let role = sessionStorage.getItem(APPCONFIG.role_key);
-    if((role == 'agent') && (this.advancedSearchForm.value.advAssignedTo == undefined 
-      || this.advancedSearchForm.value.advAssignedTo == '')){//also check if it already has a value
-      this.advancedSearchForm.value.advAssignedTo = sessionStorage.getItem(APPCONFIG.user_id);
-    }
+    // let role = sessionStorage.getItem(APPCONFIG.role_key);
+    // if((role == 'agent') && (this.advancedSearchForm.value.advAssignedTo == undefined 
+    //   || this.advancedSearchForm.value.advAssignedTo == '')){//also check if it already has a value
+    //   this.advancedSearchForm.value.advAssignedTo = sessionStorage.getItem(APPCONFIG.user_id);
+    // }
     let data = JSON.stringify(this.advancedSearchForm.value);
-    let paramdata = '?page=' + this.page.pageable.pageNumber + '&size=' + this.pageSize + '&access_token=' + this.accessToken;
+    console.log(data)
+    // let paramdata = '?page=' + this.page.pageable.pageNumber + '&size=' + this.pageSize + '&access_token=' + this.accessToken;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-    this.http.post(this.apiUrl + 'form/search/list' + paramdata, data, { headers: headers }).subscribe(
+    this.http.get('https://msdocs-python-webapp-quickstart-xyztctest.azurewebsites.net/hello_azure/fvalsearchurl/?enterkey=VendorName&entervalue=Google', { headers: headers }).subscribe(
       data => {
-        this.fileRecords = data['content'];
-        this.pageData = data;
-        this.startCalDate = data['startDate'];
-        this.endCalDate = data['endDate'];
-        this.page = this.pageData;
-        this.dataSource = new MatTableDataSource<PeriodicElement>(this.fileRecords);
-        console.log(this.fileRecords);
-        if (this.fileRecords == null || this.fileRecords.length == 0) this.noRecordsFound = true;
-        else this.noRecordsFound = false;
-        this.filterApplied = true;
+        console.log('data', data)
+        this.dashboardDataSource = new MatTableDataSource<dashboardDataEle>(data['Documents']);
+
         this.loader.stop();
       },
       error => {
@@ -459,6 +451,7 @@ export class DashboardComponent implements OnInit {
     );
 
   }
+
 
   getAllDashboardForms() {
     this.loader.start();

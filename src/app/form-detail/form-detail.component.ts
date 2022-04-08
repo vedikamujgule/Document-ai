@@ -9,7 +9,7 @@ import { CommonService } from '../shared/common.service';
 import { AuthService } from './../auth/auth.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { MatAccordion } from '@angular/material/expansion';
-import { take } from 'rxjs/operators';
+import { findIndex, take } from 'rxjs/operators';
 import { AlertService } from '../alert-dialog/alert.service';
 import { OnHoldDialogComponent, StatusDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { DataService } from '../shared/data.service';
@@ -69,6 +69,9 @@ export class FormDetailComponent implements OnInit {
   itemsTable: FormGroup;
   invoiceDetails: any;
   documentID: any;
+  
+   APIFields= [];
+   APIItemFields = [];
 
   constructor(private _ngZone: NgZone,
     private authService: AuthService,
@@ -344,8 +347,9 @@ export class FormDetailComponent implements OnInit {
       this.loader.start();
       this.http.get('https://msdocs-python-webapp-quickstart-xyztctest.azurewebsites.net/hello_azure/backendurl/?Invoice_Id='+ documentID).subscribe((data: any) => {
           this.invoiceDetails = data;
-          this.loader.stop();
+
           console.log("doc data",  this.invoiceDetails)
+          this.setDynamicData(this.invoiceDetails?.Documents[0])
           this.details.push( this.invoiceDetails?.Documents[0]);
           // console.log('heer',this.details[0]);
           this.items.push(this.details[0].Invoice_items.Item1)
@@ -353,6 +357,7 @@ export class FormDetailComponent implements OnInit {
           // this.items.push(this.details[0].Invoice_items.Item3)
           console.log('data', this.items)
           this.getApplicationDetails();
+          this.loader.stop();
       
       },
         error => {
@@ -364,7 +369,42 @@ export class FormDetailComponent implements OnInit {
       this.commonService.displayShortMessage("There is some error, please contact administrator.", 3000);
 
     }
+  }
+  setDynamicData(data){
+    try {
+      let items =[];
+      console.log("inside", data)
+      for (var key in data) {
+        if(key !== 'Invoice_items'){
+          this.APIFields.push(
+            {
+              type: "input",
+              name: key,
+              label: key,
+              value: data[key]['Label'],
+              required: true,
+          })
+        }
+        else {
+        items = data[key];
+        }
+      }
+      for (var key in items) {
+          this.APIItemFields.push(
+            {
+              type: "input",
+              name: key,
+              label: key,
+              value: data[key]['Label'],
+              required: true,
+          })
+          console.log
 
+      }
+      console.log("dynamic fields", this.APIFields,this.APIItemFields)
+    } catch (error) {
+      
+    }
   }
 
 }
